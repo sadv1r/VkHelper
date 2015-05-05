@@ -7,7 +7,7 @@ import java.io.IOException;
  * @author sadv1r
  * @version 1.0
  */
-public interface Parsable {
+public interface IParsable {
     /**
      * Парсит данные пользователя из социальной сети
      *

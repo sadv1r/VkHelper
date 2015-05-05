@@ -11,7 +11,7 @@ import java.net.URL;
  * @author sadv1r
  * @version 1.0
  */
-public abstract class User implements Parsable {
+public abstract class User implements IParsable {
     /**
      * Получает ответ ресурса в формате Json по url
      *
