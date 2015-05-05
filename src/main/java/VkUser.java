@@ -74,11 +74,21 @@ public class VkUser extends User {
         this.lastName = lastName;
     }
 
-
+    
+    /**
+     * Получает текущий список полей для запроса из Вконтакте
+     *
+     * @return Список полей через запятую
+     */
     public String getFieldsToParse() {
         return fieldsToParse;
     }
 
+    /**
+     * Устанавливает список полей для запроса из Вконтакте
+     *
+     * @param fieldsToParse Список полей через запятую
+     */
     public void setFieldsToParse(String fieldsToParse) {
         this.fieldsToParse = fieldsToParse;
     }
