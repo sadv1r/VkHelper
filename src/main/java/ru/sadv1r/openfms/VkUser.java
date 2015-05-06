@@ -62,6 +62,42 @@ public class VkUser extends User {
     @Size(min = 3, max = 10)
     private String birthday;
 
+    @JsonProperty("city")
+    private City city;
+
+    @JsonIgnoreProperties("id")
+    public class City {
+        @Size(min = 3, max = 32)
+        private String title;
+
+        public String getTitle() {
+            return title;
+        }
+
+        @JsonSetter("title")
+        public void setTitle(String title) {
+            this.title = title;
+        }
+    }
+
+    @JsonProperty("country")
+    private Country country;
+
+    @JsonIgnoreProperties("id")
+    public class Country {
+        @Size(min = 3, max = 32)
+        private String title;
+
+        public String getTitle() {
+            return title;
+        }
+
+        @JsonSetter("title")
+        public void setTitle(String title) {
+            this.title = title;
+        }
+    }
+
 
     public int getVkId() {
         return vkId;
@@ -133,6 +169,24 @@ public class VkUser extends User {
     @JsonSetter("bdate")
     public void setBirthday(String birthday) {
         this.birthday = birthday;
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    @JsonSetter("city")
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    @JsonSetter("country")
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
 
