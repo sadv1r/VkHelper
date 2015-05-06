@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Пользователь социальной сети Вконтакте
@@ -182,6 +184,37 @@ public class VkUser extends User {
     public VkUser parse(String screenName) throws IOException {
         int vkId = getUserId(screenName);
         return parse(vkId);
+    }
+
+    /**
+     * Парсит данные пользователей Вконтакте
+     *
+     * @param ids Уникальные идентификаторы пользователей <b>id</b>. Не более 1000
+     * @return Объекты пользователей
+     * @throws IOException
+     */
+    public ArrayList<VkUser> parse(int[] ids) throws IOException {
+        int idsLength = ids.length;
+        if (idsLength <= 1000) {
+            for (int id : ids) {
+                if (!correctVkIdFormat(id)) {
+                    throw new IllegalArgumentException("id пользователя имеет недопустимый формат: " + id);
+                }
+            }
+            ArrayList<VkUser> vkUsers = new ArrayList<>(idsLength);
+            String stringIds = Arrays.toString(ids).replaceAll("[\\[ \\]]", "");
+            ObjectMapper mapper = new ObjectMapper();
+            String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
+                    + stringIds + "&fields=" + fieldsToParse;
+            JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response");
+            for (int i = 0; i < idsLength; i++) {
+                VkUser vkUser = mapper.readValue(usersGetResult.get(i).toString(), VkUser.class);
+                vkUsers.add(vkUser);
+            }
+            return vkUsers;
+        } else {
+            throw new IllegalArgumentException("Количество идентификаторов не может быть больше 1000");
+        }
     }
 
     /**
