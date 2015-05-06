@@ -24,7 +24,7 @@ import java.util.Arrays;
 public class VkUser extends User {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
-    public static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
+    private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
     private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
             "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
