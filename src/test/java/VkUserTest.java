@@ -1,4 +1,6 @@
 import org.junit.Test;
+import ru.sadv1r.openfms.VkUser;
+
 import static org.junit.Assert.*;
 
 public class VkUserTest {

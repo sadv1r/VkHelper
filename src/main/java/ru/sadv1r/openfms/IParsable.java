@@ -1,3 +1,5 @@
+package ru.sadv1r.openfms;
+
 import java.io.IOException;
 
 /**
