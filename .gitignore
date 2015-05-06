@@ -2,4 +2,4 @@
 out/
 *.iml
 target/
-src/main/java/Main.java
+src/main/java/ru/sadv1r/openfms/alpha/
