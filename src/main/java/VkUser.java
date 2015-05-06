@@ -20,7 +20,11 @@ import java.io.IOException;
 public class VkUser extends User {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
-    private String fieldsToParse = "verified,contacts,nickname,sex,bdate,home_town,connections,screen_name,maiden_name";
+    private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
+            "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
+            "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
+            "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
+            "tv,books,games,about,quotes,personal,nickname";
 
     @JsonProperty("id")
     @NotNull
@@ -37,15 +41,22 @@ public class VkUser extends User {
     @JsonProperty("sex")
     private boolean sex;
 
+    @JsonProperty("nickname")
+    @Size(min = 1, max = 20)
+    private String nickname;
 
-    public boolean getSex() {
-        return sex;
-    }
+    @JsonProperty("maiden_name")
+    @Size(min = 1, max = 20)
+    private String maidenName;
 
-    @JsonSetter("sex")
-    public void setSex(int sex) {
-        this.sex = sex != 1;
-    }
+    @JsonProperty("screen_name")
+    @Size(min = 1, max = 20)
+    private String screenName;
+
+    @JsonProperty("bdate")
+    @Size(min = 5, max = 10)
+    private String birthday;
+
 
     public int getVkId() {
         return vkId;
@@ -74,7 +85,52 @@ public class VkUser extends User {
         this.lastName = lastName;
     }
 
-    
+    public boolean getSex() {
+        return sex;
+    }
+
+    @JsonSetter("sex")
+    public void setSex(int sex) {
+        this.sex = sex != 1;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    @JsonSetter("nickname")
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getMaidenName() {
+        return maidenName;
+    }
+
+    @JsonSetter("maiden_name")
+    public void setMaidenName(String maidenName) {
+        this.maidenName = maidenName;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    @JsonSetter("screen_name")
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    @JsonSetter("bdate")
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+
     /**
      * Получает текущий список полей для запроса из Вконтакте
      *
