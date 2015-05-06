@@ -36,30 +36,30 @@ public class VkUser extends User {
     private int vkId;
 
     @JsonProperty("first_name")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 32)
     private String firstName;
 
     @JsonProperty("last_name")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 32)
     private String lastName;
 
     @JsonProperty("sex")
     private boolean sex;
 
     @JsonProperty("nickname")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 32)
     private String nickname;
 
     @JsonProperty("maiden_name")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 32)
     private String maidenName;
 
     @JsonProperty("screen_name")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 32)
     private String screenName;
 
     @JsonProperty("bdate")
-    @Size(min = 5, max = 10)
+    @Size(min = 3, max = 10)
     private String birthday;
 
 
