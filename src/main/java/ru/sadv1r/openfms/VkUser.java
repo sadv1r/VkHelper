@@ -24,6 +24,7 @@ import java.util.Arrays;
 public class VkUser extends User {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
+    public static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
     private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
             "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
@@ -188,13 +189,13 @@ public class VkUser extends User {
     /**
      * Парсит данные пользователей Вконтакте
      *
-     * @param ids Уникальные идентификаторы пользователей <b>id</b>. Не более 1000
+     * @param ids Уникальные идентификаторы пользователей <b>id</b>. Не более 500
      * @return Объекты пользователей
      * @throws IOException
      */
     public ArrayList<VkUser> parse(int[] ids) throws IOException {
         int idsLength = ids.length;
-        if (idsLength <= 1000) {
+        if (idsLength <= MAX_USERS_TO_PARSE_AT_ONCE) {
             for (int id : ids) {
                 if (!correctVkIdFormat(id)) {
                     throw new IllegalArgumentException("id пользователя имеет недопустимый формат: " + id);
@@ -212,7 +213,7 @@ public class VkUser extends User {
             }
             return vkUsers;
         } else {
-            throw new IllegalArgumentException("Количество идентификаторов не может быть больше 1000");
+            throw new IllegalArgumentException("Количество идентификаторов не может быть больше " + MAX_USERS_TO_PARSE_AT_ONCE);
         }
     }
 
