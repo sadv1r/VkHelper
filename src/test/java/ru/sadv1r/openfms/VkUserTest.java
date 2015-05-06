@@ -1,3 +1,5 @@
+package ru.sadv1r.openfms;
+
 import org.junit.Test;
 import ru.sadv1r.openfms.VkUser;
 
