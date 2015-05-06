@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -33,6 +35,8 @@ public class VkUser extends User {
 
     @JsonProperty("id")
     @NotNull
+    @Min(VK_MIN_ID)
+    @Max(VK_MAX_ID)
     private int vkId;
 
     @JsonProperty("first_name")
@@ -65,10 +69,24 @@ public class VkUser extends User {
     @JsonProperty("city")
     private City city;
 
-    @JsonIgnoreProperties("id")
     public class City {
+        @JsonProperty("id")
+        @Min(1)
+        //FIXME @Max(?)
+        private int id;
+
+        @JsonProperty("title")
         @Size(min = 3, max = 32)
         private String title;
+
+        public int getId() {
+            return id;
+        }
+
+        @JsonSetter("id")
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public String getTitle() {
             return title;
@@ -83,10 +101,23 @@ public class VkUser extends User {
     @JsonProperty("country")
     private Country country;
 
-    @JsonIgnoreProperties("id")
     public class Country {
+        @JsonProperty("id")
+        @Min(1)
+        //FIXME @Max(?)
+        private int id;
+
         @Size(min = 3, max = 32)
         private String title;
+
+        public int getId() {
+            return id;
+        }
+
+        @JsonSetter("id")
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public String getTitle() {
             return title;
