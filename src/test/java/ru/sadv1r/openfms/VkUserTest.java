@@ -28,4 +28,12 @@ public class VkUserTest {
             assertEquals(TEST_USERS_IDS[i], vkUsers.get(i).getVkId());
         }
     }
+
+    @Test
+    public void testParseManyString() throws Exception {
+        ArrayList<VkUser> vkUsers = vkUser.parse(TEST_USERS_SCREEN_NAMES);
+        for (int i = 0; i < TEST_USERS_IDS.length; i++) {
+            assertEquals(TEST_USERS_IDS[i], vkUsers.get(i).getVkId());
+        }
+    }
 }

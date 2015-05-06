@@ -217,6 +217,23 @@ public class VkUser extends User {
     }
 
     /**
+     * Перегрузка метода parse(int[] ids)
+     *
+     * @see #parse(int[])
+     * @param screenNames Короткие имена пользователей
+     * @return Объекты пользователей
+     * @throws IOException
+     */
+    public ArrayList<VkUser> parse(String[] screenNames) throws IOException {
+        int screenNamesLength = screenNames.length;
+        int[] ids = new int[screenNamesLength];
+        for (int i = 0; i < screenNamesLength; i++) {
+            ids[i] = getUserId(screenNames[i]);
+        }
+        return parse(ids);
+    }
+
+    /**
      * Проверяет id пользователя Вконтакте на соответсвие формату
      *
      * @param vkId Уникальный идентификатор пользователя <b>id</b>
