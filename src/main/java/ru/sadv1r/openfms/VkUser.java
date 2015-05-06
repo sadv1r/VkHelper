@@ -162,11 +162,10 @@ public class VkUser extends User {
     public VkUser parse(int vkId) throws IOException {
         if (correctVkIdFormat(vkId)) {
             ObjectMapper mapper = new ObjectMapper();
-            VkUser vkUser;
             String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
                     + vkId + "&fields=" + fieldsToParse;
             JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response").get(0);
-            vkUser = mapper.readValue(usersGetResult.toString(), VkUser.class);
+            VkUser vkUser = mapper.readValue(usersGetResult.toString(), VkUser.class);
             return vkUser;
         } else {
             throw new IllegalArgumentException("id пользователя имеет недопустимый формат");
