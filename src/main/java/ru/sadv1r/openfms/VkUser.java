@@ -107,6 +107,7 @@ public class VkUser extends User {
         //FIXME @Max(?)
         private int id;
 
+        @JsonProperty("title")
         @Size(min = 3, max = 32)
         private String title;
 
