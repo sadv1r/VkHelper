@@ -14,7 +14,7 @@ import java.util.Properties;
  * @version 0.1
  */
 public class MySql extends DataBase {
-    private static final int GEET_VK_ID_LIST_LIMIT = 1000;
+    private static final int GET_VK_ID_LIST_LIMIT = 1000;
     private static final Logger LOGGER = Logger.getLogger(MySql.class);
     private Connection connection = null;
     private static final String CHARSET = "UTF-8";
@@ -36,19 +36,19 @@ public class MySql extends DataBase {
         }
         LOGGER.debug("Конструктор завершил работу");
     }
-    
+
     @Override
     public ArrayList<Integer> getVkIdsToParse(int offset) throws SQLException {
         LOGGER.debug("Метод getVkIdsToParse запущен");
-        ArrayList<Integer> vkIds = new ArrayList<>(GEET_VK_ID_LIST_LIMIT);
+        ArrayList<Integer> vkIds = new ArrayList<>(GET_VK_ID_LIST_LIMIT);
         Statement statement = null;
         ResultSet resultSet = null;
 
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT vk_id FROM vk_id_list ORDER BY id DESC LIMIT " +
-                    GEET_VK_ID_LIST_LIMIT + " OFFSET " + offset);
-            LOGGER.trace("Запрос \"SELECT vk_id FROM vk_id_list ORDER BY id DESC LIMIT " + GEET_VK_ID_LIST_LIMIT +
+                    GET_VK_ID_LIST_LIMIT + " OFFSET " + offset);
+            LOGGER.trace("Запрос \"SELECT vk_id FROM vk_id_list ORDER BY id DESC LIMIT " + GET_VK_ID_LIST_LIMIT +
                     " OFFSET " + offset + "\" прошел успешно");
 
             while (resultSet.next()) {
