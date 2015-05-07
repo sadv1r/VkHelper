@@ -14,6 +14,8 @@ import java.util.ArrayList;
 public class VkUserTest {
     private static final String[] TEST_USERS_SCREEN_NAMES = {"sadv1r", "durov"};
     private static final int[] TEST_USERS_IDS = {9313032, 1};
+    private static final int RANDOM_USERS_TO_TEST = 50;
+    private static final int TEST_VK_MAX_ID = 1000;
     private static Validator validator;
 
     private VkUser vkUser = new VkUser();
@@ -27,6 +29,15 @@ public class VkUserTest {
     @Test
     public void vkUserIsValid() throws IOException {
         assertEquals(0, validator.validate(vkUser.parse(TEST_USERS_IDS[0])).size());
+    }
+
+    @Test
+    public void vkUserIsValidMany() throws IOException {
+        int vkId;
+        for (int i = 0; i < RANDOM_USERS_TO_TEST; i++) {
+            vkId = (int) (Math.random() * TEST_VK_MAX_ID) + 1;
+            assertEquals(0, validator.validate(vkUser.parse(TEST_USERS_IDS[vkId])).size());
+        }
     }
 
     @Test
