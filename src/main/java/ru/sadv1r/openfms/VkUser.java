@@ -129,6 +129,144 @@ public class VkUser extends User {
         }
     }
 
+    @JsonProperty("schools")
+    private School[] schools;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class School {
+        @JsonProperty("id")
+        private int id;
+
+        @JsonProperty("country")
+        private int country;
+
+        @JsonProperty("city")
+        private int city;
+
+        @JsonProperty("name")
+        private String name;
+
+        @JsonProperty("year_from")
+        private int yearFrom;
+
+        @JsonProperty("year_to")
+        private int yearTo;
+
+        @JsonProperty("year_graduated")
+        private int yearGraduated;
+
+        @JsonProperty("class")
+        private String classLetter;
+
+        @JsonProperty("speciality")
+        private String speciality;
+
+        @JsonProperty("type")
+        private int type;
+
+        @JsonProperty("type_str")
+        private String typeStr;
+
+        public int getId() {
+            return id;
+        }
+
+        @JsonSetter("id")
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getCountry() {
+            return country;
+        }
+
+        @JsonSetter("country")
+        public void setCountry(int country) {
+            this.country = country;
+        }
+
+        public int getCity() {
+            return city;
+        }
+
+        @JsonSetter("city")
+        public void setCity(int city) {
+            this.city = city;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @JsonSetter("name")
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getYearFrom() {
+            return yearFrom;
+        }
+
+        @JsonSetter("year_from")
+        public void setYearFrom(int yearFrom) {
+            this.yearFrom = yearFrom;
+        }
+
+        public int getYearTo() {
+            return yearTo;
+        }
+
+        @JsonSetter("year_to")
+        public void setYearTo(int yearTo) {
+            this.yearTo = yearTo;
+        }
+
+        public int getYearGraduated() {
+            return yearGraduated;
+        }
+
+        @JsonSetter("year_graduated")
+        public void setYearGraduated(int yearGraduated) {
+            this.yearGraduated = yearGraduated;
+        }
+
+        public String getClassLetter() {
+            return classLetter;
+        }
+
+        @JsonSetter("class")
+        public void setClassLetter(String classLetter) {
+            this.classLetter = classLetter;
+        }
+
+        public String getSpeciality() {
+            return speciality;
+        }
+
+        @JsonSetter("speciality")
+        public void setSpeciality(String speciality) {
+            this.speciality = speciality;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        @JsonSetter("type")
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public String getTypeStr() {
+            return typeStr;
+        }
+
+        @JsonSetter("type_str")
+        public void setTypeStr(String typeStr) {
+            this.typeStr = typeStr;
+        }
+    }
+
 
     public int getVkId() {
         return vkId;
@@ -218,6 +356,15 @@ public class VkUser extends User {
     @JsonSetter("country")
     public void setCountry(Country country) {
         this.country = country;
+    }
+
+    public School[] getSchools() {
+        return schools;
+    }
+
+    @JsonSetter("schools")
+    public void setSchools(School[] schools) {
+        this.schools = schools;
     }
 
 
