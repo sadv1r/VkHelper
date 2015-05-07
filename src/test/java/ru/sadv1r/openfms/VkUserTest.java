@@ -36,7 +36,7 @@ public class VkUserTest {
         int vkId;
         for (int i = 0; i < RANDOM_USERS_TO_TEST; i++) {
             vkId = (int) (Math.random() * TEST_VK_MAX_ID) + 1;
-            assertEquals(0, validator.validate(vkUser.parse(TEST_USERS_IDS[vkId])).size());
+            assertEquals(0, validator.validate(vkUser.parse(vkId)).size());
         }
     }
 
