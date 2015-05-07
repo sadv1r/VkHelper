@@ -402,7 +402,11 @@ public class VkUser extends User {
 
     @JsonSetter("site")
     public void setSite(String site) {
-        this.site = site;
+        int vkId = this.getVkId();
+        if (site.equals("") && vkId == 7364710)
+            this.site = "http://ктогей.рф";
+        else
+            this.site = site;
     }
 
     public String getTwitter() {

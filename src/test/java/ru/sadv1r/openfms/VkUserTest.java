@@ -65,4 +65,9 @@ public class VkUserTest {
             assertEquals(TEST_USERS_IDS[i], vkUsers.get(i).getVkId());
         }
     }
+
+    @Test
+    public void vkUserIsBetepok() throws IOException {
+        assertEquals("http://ктогей.рф", vkUser.parse(7364710).getSite());
+    }
 }
