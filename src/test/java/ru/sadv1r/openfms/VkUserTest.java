@@ -15,7 +15,7 @@ public class VkUserTest {
     private static final String[] TEST_USERS_SCREEN_NAMES = {"sadv1r", "durov"};
     private static final int[] TEST_USERS_IDS = {9313032, 1};
     private static final int RANDOM_USERS_TO_TEST = 50;
-    private static final int TEST_VK_MAX_ID = 1000;
+    private static final int TEST_VK_MAX_ID = 1000_000;
     private static Validator validator;
 
     private VkUser vkUser = new VkUser();
