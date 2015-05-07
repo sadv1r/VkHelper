@@ -287,6 +287,10 @@ public class VkUser extends User {
     @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина твиттера должна быть: " + VK_STRING_MAX_LENGTH)
     private String twitter;
 
+    @JsonProperty("instagram")
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина инстаграма должна быть: " + VK_STRING_MAX_LENGTH)
+    private String instagram;
+
 
     public int getVkId() {
         return vkId;
@@ -417,6 +421,16 @@ public class VkUser extends User {
     public void setTwitter(String twitter) {
         this.twitter = twitter;
     }
+
+    public String getInstagram() {
+        return instagram;
+    }
+
+    @JsonSetter("instagram")
+    public void setInstagram(String instagram) {
+        this.instagram = instagram;
+    }
+
 
     /**
      * Получает текущий список полей для запроса из Вконтакте
