@@ -267,6 +267,9 @@ public class VkUser extends User {
         }
     }
 
+    @JsonProperty("photo_id")
+    private int photoId;
+
 
     public int getVkId() {
         return vkId;
@@ -365,6 +368,15 @@ public class VkUser extends User {
     @JsonSetter("schools")
     public void setSchools(School[] schools) {
         this.schools = schools;
+    }
+
+    public int getPhotoId() {
+        return photoId;
+    }
+
+    @JsonSetter("photo_id")
+    public void setPhotoId(String photoId) {
+        this.photoId = Integer.parseInt(photoId.split("_")[1]);
     }
 
 
