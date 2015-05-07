@@ -27,6 +27,7 @@ public class VkUser extends User {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
     private static final int VK_STRING_MAX_LENGTH = 50;
+    private static final int VK_SITE_MAX_LENGTH = 150;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
     private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
@@ -278,6 +279,10 @@ public class VkUser extends User {
     @JsonProperty("photo_id")
     private int photoId;
 
+    @JsonProperty("site")
+    @Size(max = VK_SITE_MAX_LENGTH, message = "максимальная длина сайта должна быть: " + VK_SITE_MAX_LENGTH)
+    private String site;
+
 
     public int getVkId() {
         return vkId;
@@ -387,6 +392,14 @@ public class VkUser extends User {
         this.photoId = Integer.parseInt(photoId.split("_")[1]);
     }
 
+    public String getSite() {
+        return site;
+    }
+
+    @JsonSetter("site")
+    public void setSite(String site) {
+        this.site = site;
+    }
 
     /**
      * Получает текущий список полей для запроса из Вконтакте
