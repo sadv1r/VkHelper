@@ -104,7 +104,7 @@ public class VkUser extends User {
     public static class Country {
         @JsonProperty("id")
         @Min(1)
-        //FIXME @Max(?)
+        @Max(300)
         private int id;
 
         @JsonProperty("title")
@@ -399,8 +399,7 @@ public class VkUser extends User {
             String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
                     + vkId + "&fields=" + fieldsToParse;
             JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response").get(0);
-            VkUser vkUser = mapper.readValue(usersGetResult.toString(), VkUser.class);
-            return vkUser;
+            return mapper.readValue(usersGetResult.toString(), VkUser.class);
         } else {
             throw new IllegalArgumentException("id пользователя имеет недопустимый формат");
         }
