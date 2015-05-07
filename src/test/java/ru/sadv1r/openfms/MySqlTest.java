@@ -1,8 +1,11 @@
 package ru.sadv1r.openfms;
 
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class MySqlTest {
     private static final String SERVER_NAME = "localhost";

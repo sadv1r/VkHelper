@@ -36,13 +36,8 @@ public class MySql extends DataBase {
         }
         LOGGER.debug("Конструктор завершил работу");
     }
-
-    /**
-     *
-     * @param offset
-     * @return
-     * @throws SQLException
-     */
+    
+    @Override
     public ArrayList<Integer> getVkIdsToParse(int offset) throws SQLException {
         LOGGER.debug("Метод getVkIdsToParse запущен");
         ArrayList<Integer> vkIds = new ArrayList<>(GEET_VK_ID_LIST_LIMIT);
