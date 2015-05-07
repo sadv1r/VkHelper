@@ -69,7 +69,7 @@ public class VkUser extends User {
     @JsonProperty("city")
     private City city;
 
-    public class City {
+    public static class City {
         @JsonProperty("id")
         @Min(1)
         //FIXME @Max(?)
@@ -101,7 +101,7 @@ public class VkUser extends User {
     @JsonProperty("country")
     private Country country;
 
-    public class Country {
+    public static class Country {
         @JsonProperty("id")
         @Min(1)
         //FIXME @Max(?)
