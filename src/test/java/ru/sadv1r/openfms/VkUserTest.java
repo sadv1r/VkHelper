@@ -1,15 +1,33 @@
 package ru.sadv1r.openfms;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class VkUserTest {
     private static final String[] TEST_USERS_SCREEN_NAMES = {"sadv1r", "durov"};
     private static final int[] TEST_USERS_IDS = {9313032, 1};
+    private static Validator validator;
 
-    VkUser vkUser = new VkUser();
+    private VkUser vkUser = new VkUser();
+
+    @BeforeClass
+    public static void setUp() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
+    @Test
+    public void vkUserIsValid() throws IOException {
+        assertEquals(0, validator.validate(vkUser.parse(TEST_USERS_IDS[0])).size());
+    }
 
     @Test
     public void testParseInt() throws Exception {
