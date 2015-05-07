@@ -25,6 +25,7 @@ import java.util.Arrays;
 public class VkUser extends User {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
+    private static final int VK_STRING_MAX_LENGTH = 50;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
     private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
@@ -34,48 +35,51 @@ public class VkUser extends User {
 
     @JsonProperty("id")
     @NotNull(message = "id должен быть задан")
-    @Min(VK_MIN_ID)
-    @Max(VK_MAX_ID)
+    @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
+    @Max(value = VK_MAX_ID, message = "максимальный id пользователя должен быть: " + VK_MAX_ID)
     private int vkId;
 
     @JsonProperty("first_name")
-    @Size(min = 1, max = 32)
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина имени должна быть: " + VK_STRING_MAX_LENGTH)
     private String firstName;
 
     @JsonProperty("last_name")
-    @Size(min = 1, max = 32)
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина фамилии должна быть: " + VK_STRING_MAX_LENGTH)
     private String lastName;
 
     @JsonProperty("sex")
     private boolean sex;
 
     @JsonProperty("nickname")
-    @Size(min = 1, max = 32)
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина ника должна быть: " + VK_STRING_MAX_LENGTH)
     private String nickname;
 
     @JsonProperty("maiden_name")
-    @Size(min = 1, max = 32)
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина девичьей фамилии должна быть: " + VK_STRING_MAX_LENGTH)
     private String maidenName;
 
     @JsonProperty("screen_name")
-    @Size(min = 1, max = 32)
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина screen name должна быть: " + VK_STRING_MAX_LENGTH)
     private String screenName;
 
     @JsonProperty("bdate")
-    @Size(min = 3, max = 10)
+    @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
     @JsonProperty("city")
     private City city;
 
     public static class City {
+        private static final int VK_CITY_MIN_ID = 1;
+        private static final int VK_CITY_MAX_ID = 1_000_000_000;
+
         @JsonProperty("id")
-        @Min(1)
-        //FIXME @Max(?)
+        @Min(value = VK_CITY_MIN_ID, message = "минимальный id города должен быть: " + VK_CITY_MIN_ID)
+        @Max(value = VK_CITY_MAX_ID, message = "максимальный id города должен быть: " + VK_CITY_MAX_ID)
         private int id;
 
         @JsonProperty("title")
-        @Size(min = 3, max = 32)
+        @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия города должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
         public int getId() {
@@ -101,13 +105,16 @@ public class VkUser extends User {
     private Country country;
 
     public static class Country {
+        private static final int VK_COUNTRY_MIN_ID = 1;
+        private static final int VK_COUNTRY_MAX_ID = 300;
+
         @JsonProperty("id")
-        @Min(1)
-        @Max(300)
+        @Min(value = VK_COUNTRY_MIN_ID, message = "минимальный id страны должен быть: " + VK_COUNTRY_MIN_ID)
+        @Max(value = VK_COUNTRY_MAX_ID, message = "максимальный id страны должен быть: " + VK_COUNTRY_MAX_ID)
         private int id;
 
         @JsonProperty("title")
-        @Size(min = 3, max = 32)
+        @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия страны должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
         public int getId() {
