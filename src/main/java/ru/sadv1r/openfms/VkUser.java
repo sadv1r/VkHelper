@@ -34,7 +34,7 @@ public class VkUser extends User {
             "tv,books,games,about,quotes,personal,nickname";
 
     @JsonProperty("id")
-    @NotNull
+    @NotNull(message = "id должен быть задан")
     @Min(VK_MIN_ID)
     @Max(VK_MAX_ID)
     private int vkId;
