@@ -276,6 +276,120 @@ public class VkUser extends User {
         }
     }
 
+    @JsonProperty("universities")
+    private University[] universities;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class University {
+        @JsonProperty("id")
+        private int id;
+
+        @JsonProperty("country")
+        private int country;
+
+        @JsonProperty("city")
+        private int city;
+
+        @JsonProperty("name")
+        private String name;
+
+        @JsonProperty("faculty")
+        private int faculty;
+
+        @JsonProperty("faculty_name")
+        private String facultyName;
+
+        @JsonProperty("chair")
+        private int chair;
+
+        @JsonProperty("chair_name")
+        private String chairName;
+
+        @JsonProperty("graduation")
+        private int graduation;
+
+        public int getId() {
+            return id;
+        }
+
+        @JsonSetter("id")
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getCountry() {
+            return country;
+        }
+
+        @JsonSetter("country")
+        public void setCountry(int country) {
+            this.country = country;
+        }
+
+        public int getCity() {
+            return city;
+        }
+
+        @JsonSetter("city")
+        public void setCity(int city) {
+            this.city = city;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @JsonSetter("name")
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getFaculty() {
+            return faculty;
+        }
+
+        @JsonSetter("faculty")
+        public void setFaculty(int faculty) {
+            this.faculty = faculty;
+        }
+
+        public String getFacultyName() {
+            return facultyName;
+        }
+
+        @JsonSetter("faculty_name")
+        public void setFacultyName(String facultyName) {
+            this.facultyName = facultyName;
+        }
+
+        public int getChair() {
+            return chair;
+        }
+
+        @JsonSetter("chair")
+        public void setChair(int chair) {
+            this.chair = chair;
+        }
+
+        public String getChairName() {
+            return chairName;
+        }
+
+        @JsonSetter("chair_name")
+        public void setChairName(String chairName) {
+            this.chairName = chairName;
+        }
+
+        public int getGraduation() {
+            return graduation;
+        }
+
+        @JsonSetter("graduation")
+        public void setGraduation(int graduation) {
+            this.graduation = graduation;
+        }
+    }
+
     @JsonProperty("photo_id")
     private int photoId;
 
@@ -389,6 +503,15 @@ public class VkUser extends User {
     @JsonSetter("schools")
     public void setSchools(School[] schools) {
         this.schools = schools;
+    }
+
+    public University[] getUniversities() {
+        return universities;
+    }
+
+    @JsonSetter("universities")
+    public void setUniversities(University[] universities) {
+        this.universities = universities;
     }
 
     public int getPhotoId() {
