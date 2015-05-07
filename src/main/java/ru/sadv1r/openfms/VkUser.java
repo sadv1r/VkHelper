@@ -1,16 +1,15 @@
 package ru.sadv1r.openfms;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -408,10 +407,10 @@ public class VkUser extends User {
     /**
      * Перегрузка метода parse(int vkId)
      *
-     * @see #parse(int)
      * @param screenName Короткое имя пользователя
      * @return Объект пользователя
      * @throws IOException
+     * @see #parse(int)
      */
     public VkUser parse(String screenName) throws IOException {
         int vkId = getUserId(screenName);
@@ -452,10 +451,10 @@ public class VkUser extends User {
     /**
      * Перегрузка метода parse(int[] ids)
      *
-     * @see #parse(int[])
      * @param screenNames Короткие имена пользователей
      * @return Объекты пользователей
      * @throws IOException
+     * @see #parse(int[])
      */
     public ArrayList<VkUser> parse(String[] screenNames) throws IOException {
         int screenNamesLength = screenNames.length;
