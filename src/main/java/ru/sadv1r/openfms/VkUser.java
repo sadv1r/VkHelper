@@ -283,6 +283,10 @@ public class VkUser extends User {
     @Size(max = VK_SITE_MAX_LENGTH, message = "максимальная длина сайта должна быть: " + VK_SITE_MAX_LENGTH)
     private String site;
 
+    @JsonProperty("twitter")
+    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина твиттера должна быть: " + VK_STRING_MAX_LENGTH)
+    private String twitter;
+
 
     public int getVkId() {
         return vkId;
@@ -399,6 +403,15 @@ public class VkUser extends User {
     @JsonSetter("site")
     public void setSite(String site) {
         this.site = site;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    @JsonSetter("twitter")
+    public void setTwitter(String twitter) {
+        this.twitter = twitter;
     }
 
     /**
