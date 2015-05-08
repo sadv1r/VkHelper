@@ -6,12 +6,14 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -22,8 +24,9 @@ import java.util.Arrays;
  * @author sadv1r
  * @version 1.0
  */
+@Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class VkUser extends User {
+public class VkUser extends User implements Serializable {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
     private static final int VK_STRING_MAX_LENGTH = 50;
@@ -35,10 +38,14 @@ public class VkUser extends User {
             "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
             "tv,books,games,about,quotes,personal,nickname";
 
-    @JsonProperty("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
     @NotNull(message = "id должен быть задан")
     @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
     @Max(value = VK_MAX_ID, message = "максимальный id пользователя должен быть: " + VK_MAX_ID)
+    @JsonProperty("id")
     private int vkId;
 
     @JsonProperty("first_name")
@@ -68,29 +75,39 @@ public class VkUser extends User {
     @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
+    @ManyToOne
     @JsonProperty("city")
     private City city;
 
-    public static class City {
+    private int cityId;
+
+    @Entity
+    public static class City implements Serializable {
         private static final int VK_CITY_MIN_ID = 1;
         private static final int VK_CITY_MAX_ID = 1_000_000_000;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private int id;
+
+        @ManyToOne
+        private Country country;
 
         @JsonProperty("id")
         @Min(value = VK_CITY_MIN_ID, message = "минимальный id города должен быть: " + VK_CITY_MIN_ID)
         @Max(value = VK_CITY_MAX_ID, message = "максимальный id города должен быть: " + VK_CITY_MAX_ID)
-        private int id;
+        private int cityId;
 
         @JsonProperty("title")
         @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия города должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
-        public int getId() {
-            return id;
+        public int getCityId() {
+            return cityId;
         }
 
         @JsonSetter("id")
-        public void setId(int id) {
-            this.id = id;
+        public void setCityId(int cityId) {
+            this.cityId = cityId;
         }
 
         public String getTitle() {
@@ -103,29 +120,34 @@ public class VkUser extends User {
         }
     }
 
+    @ManyToOne
     @JsonProperty("country")
     private Country country;
 
-    public static class Country {
+    @Entity
+    public static class Country implements Serializable {
         private static final int VK_COUNTRY_MIN_ID = 1;
         private static final int VK_COUNTRY_MAX_ID = 300;
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private int id;
 
         @JsonProperty("id")
         @Min(value = VK_COUNTRY_MIN_ID, message = "минимальный id страны должен быть: " + VK_COUNTRY_MIN_ID)
         @Max(value = VK_COUNTRY_MAX_ID, message = "максимальный id страны должен быть: " + VK_COUNTRY_MAX_ID)
-        private int id;
+        private int countryId;
 
         @JsonProperty("title")
         @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия страны должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
-        public int getId() {
-            return id;
+        public int getCountryId() {
+            return countryId;
         }
 
         @JsonSetter("id")
-        public void setId(int id) {
-            this.id = id;
+        public void setCountryId(int countryId) {
+            this.countryId = countryId;
         }
 
         public String getTitle() {
@@ -138,13 +160,20 @@ public class VkUser extends User {
         }
     }
 
+    @ManyToOne
     @JsonProperty("schools")
     private School[] schools;
 
+    @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class School {
+    public static class School implements Serializable {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         @JsonProperty("id")
         private int id;
+
+        @JsonProperty("id")
+        private int schoolId;
 
         @JsonProperty("country")
         private int country;
@@ -176,13 +205,13 @@ public class VkUser extends User {
         @JsonProperty("type_str")
         private String typeStr;
 
-        public int getId() {
-            return id;
+        public int getSchoolId() {
+            return schoolId;
         }
 
         @JsonSetter("id")
-        public void setId(int id) {
-            this.id = id;
+        public void setSchoolId(int schoolId) {
+            this.schoolId = schoolId;
         }
 
         public int getCountry() {
@@ -276,13 +305,19 @@ public class VkUser extends User {
         }
     }
 
+    @ManyToOne
     @JsonProperty("universities")
     private University[] universities;
 
+    @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class University {
-        @JsonProperty("id")
+    public static class University implements Serializable {
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
+
+        @JsonProperty("id")
+        private int universityId;
 
         @JsonProperty("country")
         private int country;
@@ -308,13 +343,13 @@ public class VkUser extends User {
         @JsonProperty("graduation")
         private int graduation;
 
-        public int getId() {
-            return id;
+        public int getUniversityId() {
+            return universityId;
         }
 
         @JsonSetter("id")
-        public void setId(int id) {
-            this.id = id;
+        public void setUniversityId(int universityId) {
+            this.universityId = universityId;
         }
 
         public int getCountry() {
