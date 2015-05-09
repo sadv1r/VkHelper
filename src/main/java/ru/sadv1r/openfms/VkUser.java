@@ -79,8 +79,6 @@ public class VkUser extends User implements Serializable {
     @JsonProperty("city")
     private City city;
 
-    private int cityId;
-
     @Entity
     public static class City implements Serializable {
         private static final int VK_CITY_MIN_ID = 1;
@@ -88,9 +86,6 @@ public class VkUser extends User implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
-
-        @ManyToOne
-        private Country country;
 
         @JsonProperty("id")
         @Min(value = VK_CITY_MIN_ID, message = "минимальный id города должен быть: " + VK_CITY_MIN_ID)
