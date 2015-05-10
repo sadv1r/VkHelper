@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -25,6 +27,7 @@ import java.util.Arrays;
  * @version 1.0
  */
 @Entity
+@Audited
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -74,6 +77,7 @@ public class VkUser extends User implements Serializable {
     @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
+    @NotAudited
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("city")
     private City city;
@@ -84,9 +88,6 @@ public class VkUser extends User implements Serializable {
         private static final int VK_CITY_MIN_ID = 1;
         private static final int VK_CITY_MAX_ID = 1_000_000_000;
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int id;
-
         @JsonProperty("id")
         @Min(value = VK_CITY_MIN_ID, message = "минимальный id города должен быть: " + VK_CITY_MIN_ID)
         @Max(value = VK_CITY_MAX_ID, message = "максимальный id города должен быть: " + VK_CITY_MAX_ID)
@@ -115,6 +116,7 @@ public class VkUser extends User implements Serializable {
         }
     }
 
+    @NotAudited
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("country")
     private Country country;
@@ -125,9 +127,6 @@ public class VkUser extends User implements Serializable {
         private static final int VK_COUNTRY_MIN_ID = 1;
         private static final int VK_COUNTRY_MAX_ID = 300;
         @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private int id;
-
         @JsonProperty("id")
         @Min(value = VK_COUNTRY_MIN_ID, message = "минимальный id страны должен быть: " + VK_COUNTRY_MIN_ID)
         @Max(value = VK_COUNTRY_MAX_ID, message = "максимальный id страны должен быть: " + VK_COUNTRY_MAX_ID)
