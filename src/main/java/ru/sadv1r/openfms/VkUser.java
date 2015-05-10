@@ -27,11 +27,13 @@ import java.util.Arrays;
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
     private static final int VK_STRING_MAX_LENGTH = 50;
     private static final int VK_SITE_MAX_LENGTH = 150;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
+    @Transient
     private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
             "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
@@ -39,9 +41,6 @@ public class VkUser extends User implements Serializable {
             "tv,books,games,about,quotes,personal,nickname";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
     @NotNull(message = "id должен быть задан")
     @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
     @Max(value = VK_MAX_ID, message = "максимальный id пользователя должен быть: " + VK_MAX_ID)
@@ -75,12 +74,13 @@ public class VkUser extends User implements Serializable {
     @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("city")
     private City city;
 
     @Entity
     public static class City implements Serializable {
+        private static final long serialVersionUID = 1L;
         private static final int VK_CITY_MIN_ID = 1;
         private static final int VK_CITY_MAX_ID = 1_000_000_000;
         @Id
@@ -115,12 +115,13 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("country")
     private Country country;
 
     @Entity
     public static class Country implements Serializable {
+        private static final long serialVersionUID = 1L;
         private static final int VK_COUNTRY_MIN_ID = 1;
         private static final int VK_COUNTRY_MAX_ID = 300;
         @Id
@@ -155,6 +156,7 @@ public class VkUser extends User implements Serializable {
         }
     }
 
+    @Transient
     @ManyToOne
     @JsonProperty("schools")
     private School[] schools;
@@ -162,6 +164,7 @@ public class VkUser extends User implements Serializable {
     @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class School implements Serializable {
+        private static final long serialVersionUID = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @JsonProperty("id")
@@ -300,6 +303,7 @@ public class VkUser extends User implements Serializable {
         }
     }
 
+    @Transient
     @ManyToOne
     @JsonProperty("universities")
     private University[] universities;
@@ -307,6 +311,7 @@ public class VkUser extends User implements Serializable {
     @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class University implements Serializable {
+        private static final long serialVersionUID = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
