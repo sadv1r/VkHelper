@@ -2,6 +2,7 @@ package ru.sadv1r.openfms;
 
 import org.hibernate.jpa.HibernatePersistenceProvider;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
@@ -25,6 +26,10 @@ public class HibernateUtil {
 
     public static EntityManagerFactory getEntityManagerFactory() {
         return entityManagerFactory;
+    }
+
+    public static EntityManager getEntityManager() {
+        return getEntityManagerFactory().createEntityManager();
     }
 
     public static void closeEntityManagerFactory() {
