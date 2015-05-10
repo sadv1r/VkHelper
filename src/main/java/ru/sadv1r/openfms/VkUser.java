@@ -37,7 +37,7 @@ public class VkUser extends User implements Serializable {
     private static final int VK_SITE_MAX_LENGTH = 150;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
     @Transient
-    private String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
+    private static String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
             "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
             "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
@@ -594,7 +594,7 @@ public class VkUser extends User implements Serializable {
      *
      * @return Список полей через запятую
      */
-    public String getFieldsToParse() {
+    public static String getFieldsToParse() {
         return fieldsToParse;
     }
 
@@ -603,8 +603,8 @@ public class VkUser extends User implements Serializable {
      *
      * @param fieldsToParse Список полей через запятую
      */
-    public void setFieldsToParse(String fieldsToParse) {
-        this.fieldsToParse = fieldsToParse;
+    public static void setFieldsToParse(String fieldsToParse) {
+        VkUser.fieldsToParse = fieldsToParse;
     }
 
     /**
@@ -613,7 +613,7 @@ public class VkUser extends User implements Serializable {
      * @param vkId Уникальный идентификатор пользователя <b>id</b>
      * @return Объект пользователя
      */
-    public VkUser parse(int vkId) throws IOException {
+    public static VkUser parse(int vkId) throws IOException {
         if (correctVkIdFormat(vkId)) {
             ObjectMapper mapper = new ObjectMapper();
             String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
@@ -633,7 +633,7 @@ public class VkUser extends User implements Serializable {
      * @throws IOException
      * @see #parse(int)
      */
-    public VkUser parse(String screenName) throws IOException {
+    public static VkUser parse(String screenName) throws IOException {
         int vkId = getUserId(screenName);
         return parse(vkId);
     }
@@ -645,7 +645,7 @@ public class VkUser extends User implements Serializable {
      * @return Объекты пользователей
      * @throws IOException
      */
-    public ArrayList<VkUser> parse(int[] ids) throws IOException {
+    public static ArrayList<VkUser> parse(int[] ids) throws IOException {
         int idsLength = ids.length;
         if (idsLength <= MAX_USERS_TO_PARSE_AT_ONCE) {
             for (int id : ids) {
@@ -677,7 +677,7 @@ public class VkUser extends User implements Serializable {
      * @throws IOException
      * @see #parse(int[])
      */
-    public ArrayList<VkUser> parse(String[] screenNames) throws IOException {
+    public static ArrayList<VkUser> parse(String[] screenNames) throws IOException {
         int screenNamesLength = screenNames.length;
         int[] ids = new int[screenNamesLength];
         for (int i = 0; i < screenNamesLength; i++) {
@@ -692,7 +692,7 @@ public class VkUser extends User implements Serializable {
      * @param vkId Уникальный идентификатор пользователя <b>id</b>
      * @return true, если формат id правильный. false - если неправильный
      */
-    private boolean correctVkIdFormat(int vkId) {
+    private static boolean correctVkIdFormat(int vkId) {
         return vkId > VK_MIN_ID && vkId < VK_MAX_ID;
     }
 
@@ -703,7 +703,7 @@ public class VkUser extends User implements Serializable {
      * @return Уникальный идентификатор пользователя <b>id</b>
      * @throws IOException
      */
-    private int getUserId(String screenName) throws IOException {
+    private static int getUserId(String screenName) throws IOException {
         JsonNode resolveScreenNameResult = getJsonNodeFromApi("https://api.vk.com/method/utils.resolveScreenName?screen_name="
                 + screenName).get("response");
         if (resolveScreenNameResult.hasNonNull("object_id")) {

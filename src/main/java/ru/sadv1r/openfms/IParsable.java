@@ -16,5 +16,5 @@ public interface IParsable {
      * @param userIdentifier Уникальный идентификатор пользователя, в социальной сети
      * @return Объект пользователя
      */
-    public User parse(String userIdentifier) throws IOException;
+    //public User parse(String userIdentifier) throws IOException;
 }
