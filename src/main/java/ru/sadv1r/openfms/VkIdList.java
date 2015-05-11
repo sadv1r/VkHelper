@@ -38,7 +38,7 @@ public class VkIdList implements Serializable {
     private boolean inBlacklist;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
+    private Date added;
 
 
     public int getVkId() {
@@ -81,13 +81,13 @@ public class VkIdList implements Serializable {
         this.inBlacklist = inBlacklist;
     }
 
-    public Date getCreated() {
-        return created;
+    public Date getAdded() {
+        return added;
     }
 
     @PrePersist
     protected void onCreate() {
-        this.created = new Date();
+        this.added = new Date();
         setInBlacklist(false);
     }
 }
