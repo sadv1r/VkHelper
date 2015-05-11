@@ -6,14 +6,12 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.envers.Audited;
-import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -35,7 +33,9 @@ public class VkUser extends User implements Serializable {
     private static final int VK_MAX_ID = 1000_000_000;
     private static final int VK_STRING_MAX_LENGTH = 50;
     private static final int VK_SITE_MAX_LENGTH = 150;
+    private static final int VK_STATUS_MAX_LENGTH = 140;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
+
     @Transient
     private static String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
             "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
@@ -77,12 +77,12 @@ public class VkUser extends User implements Serializable {
     @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
-    @NotAudited
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("city")
     private City city;
 
     @Entity
+    @Audited
     public static class City implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_CITY_MIN_ID = 1;
@@ -116,12 +116,12 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @NotAudited
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonProperty("country")
     private Country country;
 
     @Entity
+    @Audited
     public static class Country implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_COUNTRY_MIN_ID = 1;
@@ -439,6 +439,10 @@ public class VkUser extends User implements Serializable {
     @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина инстаграма должна быть: " + VK_STRING_MAX_LENGTH)
     private String instagram;
 
+    @JsonProperty("status")
+    @Size(max = VK_STATUS_MAX_LENGTH, message = "максимальная длина статуса должна быть: " + VK_STATUS_MAX_LENGTH)
+    private String status;
+
 
     public int getVkId() {
         return vkId;
@@ -586,6 +590,17 @@ public class VkUser extends User implements Serializable {
     @JsonSetter("instagram")
     public void setInstagram(String instagram) {
         this.instagram = instagram;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    @JsonSetter("status")
+    public void setStatus(String status) {
+        System.out.println(status);
+        this.status = status.replaceAll("\\p{S}", "");
+        System.out.println(this.status);
     }
 
 
