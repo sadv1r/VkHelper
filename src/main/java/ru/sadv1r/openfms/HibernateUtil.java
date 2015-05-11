@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 /**
+ * Класс для получения EntityManager
  * Created on 5/10/15.
  *
  * @author sadv1r
@@ -14,6 +15,11 @@ import javax.persistence.EntityManagerFactory;
 public class HibernateUtil {
     private static EntityManagerFactory entityManagerFactory;
 
+    /**
+     * Создает EntityManagerFactory
+     *
+     * @param persistenceUnit Имя PersistenceUnit из persistence.xml
+     */
     public static void buildEntityManagerFactory(String persistenceUnit) {
         try {
             HibernatePersistenceProvider hibernatePersistenceProvider = new HibernatePersistenceProvider();
@@ -28,6 +34,11 @@ public class HibernateUtil {
         return entityManagerFactory;
     }
 
+    /**
+     * Создает EntityManager
+     *
+     * @return EntityManager
+     */
     public static EntityManager getEntityManager() {
         return getEntityManagerFactory().createEntityManager();
     }
