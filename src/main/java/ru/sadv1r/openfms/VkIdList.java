@@ -49,6 +49,14 @@ public class VkIdList implements Serializable {
         this.vkId = vkId;
     }
 
+    public VkIdList getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(VkIdList createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public int getType() {
         return type;
     }
