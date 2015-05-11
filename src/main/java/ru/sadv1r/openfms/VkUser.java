@@ -44,7 +44,6 @@ public class VkUser extends User implements Serializable {
             "tv,books,games,about,quotes,personal,nickname";
 
     @Id
-    @NotNull(message = "id должен быть задан")
     @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
     @Max(value = VK_MAX_ID, message = "максимальный id пользователя должен быть: " + VK_MAX_ID)
     @JsonProperty("id")
@@ -598,9 +597,7 @@ public class VkUser extends User implements Serializable {
 
     @JsonSetter("status")
     public void setStatus(String status) {
-        System.out.println(status);
         this.status = status.replaceAll("\\p{S}", "");
-        System.out.println(this.status);
     }
 
 
