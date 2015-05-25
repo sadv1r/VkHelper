@@ -4,12 +4,14 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class VkUserTest {
     private static final String[] TEST_USERS_SCREEN_NAMES = {"sadv1r", "durov"};
@@ -36,7 +38,15 @@ public class VkUserTest {
         int vkId;
         for (int i = 0; i < RANDOM_USERS_TO_TEST; i++) {
             vkId = (int) (Math.random() * TEST_VK_MAX_ID) + 1;
-            assertEquals(0, validator.validate(vkUser.parse(vkId)).size());
+            Set<ConstraintViolation<VkUser>> constraintViolations = validator.validate(VkUser.parse(vkId));
+            if (!constraintViolations.isEmpty()) {
+                for (ConstraintViolation<VkUser> constraintViolation : constraintViolations) {
+                    System.out.println(constraintViolation.getMessage());
+                }
+                assertTrue(false);
+            } else {
+                assertTrue(true);
+            }
         }
     }
 

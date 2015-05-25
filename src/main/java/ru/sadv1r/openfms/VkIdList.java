@@ -13,7 +13,7 @@ import java.util.Date;
  * @version 0.1
  */
 @Entity
-@NamedQuery(name = "VkIdList.getVkIds", query = "SELECT x.vkId FROM VkIdList x")
+@NamedQuery(name = "VkIdList.getVkIds", query = "SELECT x FROM VkIdList x where x.type < 3 and x.inBlacklist = false")
 public class VkIdList implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final int VK_MIN_ID = 0;

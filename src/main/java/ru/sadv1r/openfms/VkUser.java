@@ -10,12 +10,13 @@ import org.hibernate.envers.Audited;
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Пользователь социальной сети Вконтакте
@@ -32,7 +33,7 @@ public class VkUser extends User implements Serializable {
     private static final int VK_MIN_ID = 0;
     private static final int VK_MAX_ID = 1000_000_000;
     private static final int VK_STRING_MAX_LENGTH = 50;
-    private static final int VK_SITE_MAX_LENGTH = 150;
+    private static final int VK_SITE_MAX_LENGTH = 256;
     private static final int VK_STATUS_MAX_LENGTH = 140;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
 
@@ -442,6 +443,9 @@ public class VkUser extends User implements Serializable {
     @Size(max = VK_STATUS_MAX_LENGTH, message = "максимальная длина статуса должна быть: " + VK_STATUS_MAX_LENGTH)
     private String status;
 
+    @ElementCollection
+    private Set<Integer> friends;
+
 
     public int getVkId() {
         return vkId;
@@ -485,7 +489,7 @@ public class VkUser extends User implements Serializable {
 
     @JsonSetter("nickname")
     public void setNickname(String nickname) {
-        this.nickname = nickname;
+        this.nickname = nickname.replaceAll("\\p{S}", "");
     }
 
     public String getMaidenName() {
@@ -597,7 +601,15 @@ public class VkUser extends User implements Serializable {
 
     @JsonSetter("status")
     public void setStatus(String status) {
-        this.status = status.replaceAll("\\p{S}", "");
+        this.status = status.replaceAll("\\p{S}", "").replaceAll("\\\\", "");
+    }
+
+    public Set<Integer> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<Integer> friends) {
+        this.friends = friends;
     }
 
 
@@ -631,7 +643,9 @@ public class VkUser extends User implements Serializable {
             String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
                     + vkId + "&fields=" + fieldsToParse;
             JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response").get(0);
-            return mapper.readValue(usersGetResult.toString(), VkUser.class);
+            VkUser vkUser = mapper.readValue(usersGetResult.toString(), VkUser.class);
+            vkUser.parseFriends(vkId);
+            return vkUser;
         } else {
             throw new IllegalArgumentException("id пользователя имеет недопустимый формат");
         }
@@ -722,6 +736,21 @@ public class VkUser extends User implements Serializable {
             return resolveScreenNameResult.get("object_id").asInt();
         } else {
             throw new IllegalArgumentException("Пользователя с таким коротким именем не существует");
+        }
+    }
+
+    private void parseFriends(int vkId) throws IOException {
+        String documentToParse = "https://api.vk.com/method/friends.get?v=5.24&user_id=" + vkId;
+        JsonNode friendsGetResult = getJsonNodeFromApi(documentToParse);
+        if (!friendsGetResult.hasNonNull("response")) {
+            this.setFriends(new HashSet<Integer>());
+        } else {
+            friendsGetResult = friendsGetResult.get("response").get("items");
+            Set<Integer> friends = new HashSet<>(friendsGetResult.size());
+            for (JsonNode node : friendsGetResult) {
+                friends.add(node.asInt());
+            }
+            this.setFriends(friends);
         }
     }
 }
