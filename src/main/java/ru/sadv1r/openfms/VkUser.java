@@ -443,6 +443,10 @@ public class VkUser extends User implements Serializable {
     @Size(max = VK_STATUS_MAX_LENGTH, message = "максимальная длина статуса должна быть: " + VK_STATUS_MAX_LENGTH)
     private String status;
 
+    @JsonProperty("skype")
+    private String skype;
+
+
     @ElementCollection
     private Set<Integer> friends;
 
@@ -602,6 +606,15 @@ public class VkUser extends User implements Serializable {
     @JsonSetter("status")
     public void setStatus(String status) {
         this.status = status.replaceAll("\\p{S}", "").replaceAll("\\\\", "");
+    }
+
+    public String getSkype() {
+        return skype;
+    }
+
+    @JsonSetter("skype")
+    public void setSkype(String skype) {
+        this.skype = skype;
     }
 
     public Set<Integer> getFriends() {
