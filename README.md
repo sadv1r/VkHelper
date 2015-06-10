@@ -11,4 +11,6 @@
 
 Реализация
 -----
-[Схема базы данных](http://dbdesigner.net/designer/schema/808)
+[Схема базы данных (возможный варинт)](http://dbdesigner.net/designer/schema/808)
+
+[Схема базы данных (текущий варинт)](http://img.sadv1r.ru/8x3ax.png)
