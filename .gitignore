@@ -3,3 +3,4 @@ out/
 *.iml
 target/
 src/main/java/ru/sadv1r/openfms/alpha/
+tmp/
