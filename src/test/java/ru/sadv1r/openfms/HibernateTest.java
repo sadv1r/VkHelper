@@ -8,7 +8,6 @@ import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.io.IOException;
 
 /**
  * Created on 5/10/15.
