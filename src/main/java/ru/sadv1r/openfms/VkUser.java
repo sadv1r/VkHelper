@@ -3,20 +3,17 @@ package ru.sadv1r.openfms;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Пользователь социальной сети Вконтакте
@@ -35,14 +32,6 @@ public class VkUser extends User implements Serializable {
     private static final int VK_STRING_MAX_LENGTH = 50;
     private static final int VK_SITE_MAX_LENGTH = 256;
     private static final int VK_STATUS_MAX_LENGTH = 140;
-    private static final int MAX_USERS_TO_PARSE_AT_ONCE = 500;
-
-    @Transient
-    private static String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
-            "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
-            "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
-            "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
-            "tv,books,games,about,quotes,personal,nickname";
 
     @Id
     @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
@@ -623,147 +612,5 @@ public class VkUser extends User implements Serializable {
 
     public void setFriends(Set<Integer> friends) {
         this.friends = friends;
-    }
-
-
-    /**
-     * Получает текущий список полей для запроса из Вконтакте
-     *
-     * @return Список полей через запятую
-     */
-    public static String getFieldsToParse() {
-        return fieldsToParse;
-    }
-
-    /**
-     * Устанавливает список полей для запроса из Вконтакте
-     *
-     * @param fieldsToParse Список полей через запятую
-     */
-    public static void setFieldsToParse(String fieldsToParse) {
-        VkUser.fieldsToParse = fieldsToParse;
-    }
-
-    /**
-     * Парсит данные пользователя Вконтакте
-     *
-     * @param vkId Уникальный идентификатор пользователя <b>id</b>
-     * @return Объект пользователя
-     */
-    public static VkUser parse(int vkId) throws IOException {
-        if (correctVkIdFormat(vkId)) {
-            ObjectMapper mapper = new ObjectMapper();
-            String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
-                    + vkId + "&fields=" + fieldsToParse;
-            JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response").get(0);
-            VkUser vkUser = mapper.readValue(usersGetResult.toString(), VkUser.class);
-            vkUser.parseFriends(vkId);
-            return vkUser;
-        } else {
-            throw new IllegalArgumentException("id пользователя имеет недопустимый формат");
-        }
-    }
-
-    /**
-     * Перегрузка метода parse(int vkId)
-     *
-     * @param screenName Короткое имя пользователя
-     * @return Объект пользователя
-     * @throws IOException
-     * @see #parse(int)
-     */
-    public static VkUser parse(String screenName) throws IOException {
-        int vkId = getUserId(screenName);
-        return parse(vkId);
-    }
-
-    /**
-     * Парсит данные пользователей Вконтакте
-     *
-     * @param ids Уникальные идентификаторы пользователей <b>id</b>. Не более 500
-     * @return Объекты пользователей
-     * @throws IOException
-     */
-    public static ArrayList<VkUser> parse(int[] ids) throws IOException {
-        int idsLength = ids.length;
-        if (idsLength <= MAX_USERS_TO_PARSE_AT_ONCE) {
-            for (int id : ids) {
-                if (!correctVkIdFormat(id)) {
-                    throw new IllegalArgumentException("id пользователя имеет недопустимый формат: " + id);
-                }
-            }
-            ArrayList<VkUser> vkUsers = new ArrayList<>(idsLength);
-            String stringIds = Arrays.toString(ids).replaceAll("[\\[ \\]]", "");
-            ObjectMapper mapper = new ObjectMapper();
-            String documentToParse = "https://api.vk.com/method/users.get?v=5.24&lang=ru&user_ids="
-                    + stringIds + "&fields=" + fieldsToParse;
-            JsonNode usersGetResult = getJsonNodeFromApi(documentToParse).get("response");
-            for (int i = 0; i < idsLength; i++) {
-                VkUser vkUser = mapper.readValue(usersGetResult.get(i).toString(), VkUser.class);
-                vkUsers.add(vkUser);
-            }
-            return vkUsers;
-        } else {
-            throw new IllegalArgumentException("Количество идентификаторов не может быть больше " + MAX_USERS_TO_PARSE_AT_ONCE);
-        }
-    }
-
-    /**
-     * Перегрузка метода parse(int[] ids)
-     *
-     * @param screenNames Короткие имена пользователей
-     * @return Объекты пользователей
-     * @throws IOException
-     * @see #parse(int[])
-     */
-    public static ArrayList<VkUser> parse(String[] screenNames) throws IOException {
-        int screenNamesLength = screenNames.length;
-        int[] ids = new int[screenNamesLength];
-        for (int i = 0; i < screenNamesLength; i++) {
-            ids[i] = getUserId(screenNames[i]);
-        }
-        return parse(ids);
-    }
-
-    /**
-     * Проверяет id пользователя Вконтакте на соответсвие формату
-     *
-     * @param vkId Уникальный идентификатор пользователя <b>id</b>
-     * @return true, если формат id правильный. false - если неправильный
-     */
-    private static boolean correctVkIdFormat(int vkId) {
-        return vkId > VK_MIN_ID && vkId < VK_MAX_ID;
-    }
-
-    /**
-     * Получает id пользователя Вконтакте по короткому имени
-     *
-     * @param screenName Короткое имя пользователя
-     * @return Уникальный идентификатор пользователя <b>id</b>
-     * @throws IOException
-     */
-    private static int getUserId(String screenName) throws IOException {
-        JsonNode resolveScreenNameResult = getJsonNodeFromApi("https://api.vk.com/method/utils.resolveScreenName?screen_name="
-                + screenName).get("response");
-        if (resolveScreenNameResult.hasNonNull("object_id")) {
-            return resolveScreenNameResult.get("object_id").asInt();
-        } else {
-            throw new IllegalArgumentException("Пользователя с таким коротким именем не существует");
-        }
-    }
-
-    private void parseFriends(int vkId) throws IOException {
-        String documentToParse = "https://api.vk.com/method/friends.get?v=5.24&user_id=" + vkId;
-        JsonNode friendsGetResult = getJsonNodeFromApi(documentToParse);
-        if (!friendsGetResult.hasNonNull("response")) {
-            this.setFriends(new HashSet<Integer>());
-        } else {
-            friendsGetResult = friendsGetResult.get("response").get("items");
-            Set<Integer> friends = new HashSet<>(friendsGetResult.size());
-            for (JsonNode node : friendsGetResult) {
-                friends.add(node.asInt());
-            }
-            this.setFriends(friends);
-        }
     }
 }
