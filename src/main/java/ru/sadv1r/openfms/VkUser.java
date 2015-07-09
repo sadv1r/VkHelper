@@ -21,9 +21,6 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
     private static final long serialVersionUID = 1L;
-    //private static final int VK_STRING_MAX_LENGTH = 50;
-    //private static final int VK_SITE_MAX_LENGTH = 256;
-    //private static final int VK_STATUS_MAX_LENGTH = 140;
 
     @Id
     @JsonProperty("id")
