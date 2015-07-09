@@ -1,8 +1,20 @@
 # OpenFMS
 
-Последний билд:
+Последний билд утилиты:
 -----
+Не имеет возможности ведения истории!
 [OpenFMS-1.0.0-SNAPSHOT](http://file.sadv1r.ru/openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar)
+
+Использование:
+-----
+Для получения всей информации:
+```
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользователя>
+```
+Для получения конкретного поля:
+```
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользователя> -p FirstName
+```
 
 Цель:
 -----
