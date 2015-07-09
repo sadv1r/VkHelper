@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -21,7 +19,7 @@ public class VkParser extends Parser {
     private static final int VK_MIN_ID_DEFAULT = 0;
     private static final int VK_MAX_ID_DEFAULT = 999_999_999;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT = 500;
-    private static final String PROPERTIES_PATH = "src/main/resources/vk.properties";
+    private static final String PROPERTIES_PATH = "vk.properties";
 
     private static final int VK_MIN_ID;
     private static final int VK_MAX_ID;
@@ -41,7 +39,9 @@ public class VkParser extends Parser {
         int vkMaxIdTemp = VK_MAX_ID_DEFAULT;
         int maxUsersToParseAtOnceTemp = MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT;
 
-        try (FileInputStream fileInputStream = new FileInputStream(PROPERTIES_PATH)) {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+
+        try (InputStream fileInputStream = loader.getResourceAsStream(PROPERTIES_PATH)) {
             logger.trace("Файл свойств найден");
             properties.load(fileInputStream);
             logger.trace("Конфигурация загружена");
