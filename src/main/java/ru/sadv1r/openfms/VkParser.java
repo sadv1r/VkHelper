@@ -18,7 +18,7 @@ import java.util.*;
 public class VkParser extends Parser {
     private static final Logger logger = Logger.getLogger(VkParser.class);
 
-    private static final int VK_MIN_ID_DEFAULT = 1;
+    private static final int VK_MIN_ID_DEFAULT = 0;
     private static final int VK_MAX_ID_DEFAULT = 999_999_999;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT = 500;
     private static final String PROPERTIES_PATH = "src/main/resources/vk.properties";
