@@ -6,14 +6,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Set;
 
 /**
  * Пользователь социальной сети Вконтакте
@@ -27,43 +21,33 @@ import java.util.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final int VK_MIN_ID = 0;
-    private static final int VK_MAX_ID = 1000_000_000;
-    private static final int VK_STRING_MAX_LENGTH = 50;
-    private static final int VK_SITE_MAX_LENGTH = 256;
-    private static final int VK_STATUS_MAX_LENGTH = 140;
+    //private static final int VK_STRING_MAX_LENGTH = 50;
+    //private static final int VK_SITE_MAX_LENGTH = 256;
+    //private static final int VK_STATUS_MAX_LENGTH = 140;
 
     @Id
-    @Min(value = VK_MIN_ID, message = "минимальный id пользователя должен быть: " + VK_MIN_ID)
-    @Max(value = VK_MAX_ID, message = "максимальный id пользователя должен быть: " + VK_MAX_ID)
     @JsonProperty("id")
     private int vkId;
 
     @JsonProperty("first_name")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина имени должна быть: " + VK_STRING_MAX_LENGTH)
     private String firstName;
 
     @JsonProperty("last_name")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина фамилии должна быть: " + VK_STRING_MAX_LENGTH)
     private String lastName;
 
     @JsonProperty("sex")
     private boolean sex;
 
     @JsonProperty("nickname")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина ника должна быть: " + VK_STRING_MAX_LENGTH)
     private String nickname;
 
     @JsonProperty("maiden_name")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина девичьей фамилии должна быть: " + VK_STRING_MAX_LENGTH)
     private String maidenName;
 
     @JsonProperty("screen_name")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина screen name должна быть: " + VK_STRING_MAX_LENGTH)
     private String screenName;
 
     @JsonProperty("bdate")
-    @Size(min = 3, max = 10, message = "длина даты рождения должна быть больше 2 и меньше: 11")
     private String birthday;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -78,12 +62,9 @@ public class VkUser extends User implements Serializable {
         private static final int VK_CITY_MAX_ID = 1_000_000_000;
         @Id
         @JsonProperty("id")
-        @Min(value = VK_CITY_MIN_ID, message = "минимальный id города должен быть: " + VK_CITY_MIN_ID)
-        @Max(value = VK_CITY_MAX_ID, message = "максимальный id города должен быть: " + VK_CITY_MAX_ID)
         private int cityId;
 
         @JsonProperty("title")
-        @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия города должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
         public int getCityId() {
@@ -117,12 +98,9 @@ public class VkUser extends User implements Serializable {
         private static final int VK_COUNTRY_MAX_ID = 300;
         @Id
         @JsonProperty("id")
-        @Min(value = VK_COUNTRY_MIN_ID, message = "минимальный id страны должен быть: " + VK_COUNTRY_MIN_ID)
-        @Max(value = VK_COUNTRY_MAX_ID, message = "максимальный id страны должен быть: " + VK_COUNTRY_MAX_ID)
         private int countryId;
 
         @JsonProperty("title")
-        @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина названия страны должна быть: " + VK_STRING_MAX_LENGTH)
         private String title;
 
         public int getCountryId() {
@@ -417,19 +395,15 @@ public class VkUser extends User implements Serializable {
     private int photoId;
 
     @JsonProperty("site")
-    @Size(max = VK_SITE_MAX_LENGTH, message = "максимальная длина сайта должна быть: " + VK_SITE_MAX_LENGTH)
     private String site;
 
     @JsonProperty("twitter")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина твиттера должна быть: " + VK_STRING_MAX_LENGTH)
     private String twitter;
 
     @JsonProperty("instagram")
-    @Size(max = VK_STRING_MAX_LENGTH, message = "максимальная длина инстаграма должна быть: " + VK_STRING_MAX_LENGTH)
     private String instagram;
 
     @JsonProperty("status")
-    @Size(max = VK_STATUS_MAX_LENGTH, message = "максимальная длина статуса должна быть: " + VK_STATUS_MAX_LENGTH)
     private String status;
 
     @JsonProperty("skype")
