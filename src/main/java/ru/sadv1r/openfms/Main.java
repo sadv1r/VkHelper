@@ -11,9 +11,9 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Main {
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (args[0] != null) {
-            if (args[0].equals("-vk") && args[1] != null) {
-                if (args[2] == null) {
+        if (args.length > 0) {
+            if (args[0].equals("-vk") && args.length >= 2) {
+                if (args.length == 2) {
                     VkUser vkUser;
                     if (args[1].matches("\\d")) {
                         vkUser = VkParser.parse(Integer.parseInt(args[1]));
@@ -45,7 +45,7 @@ public class Main {
                     System.out.println("Статус: " + vkUser.getStatus());
                     System.out.println("Страна: " + vkUser.getCountry().getTitle());
                     System.out.println("Город: " + vkUser.getCity().getTitle());
-                } else if (args[2].equals("-p") && args[3] != null) {
+                } else if (args.length == 4 && args[2].equals("-p")) {
                     VkParser.setFieldsToParse(args[3]);
                     VkUser vkUser;
                     if (args[1].matches("\\d")) {
