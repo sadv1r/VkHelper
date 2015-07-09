@@ -15,7 +15,7 @@ public class Main {
             if (args[0].equals("-vk") && args.length >= 2) {
                 if (args.length == 2) {
                     VkUser vkUser;
-                    if (args[1].matches("\\d")) {
+                    if (args[1].matches("\\d+")) {
                         vkUser = VkParser.parse(Integer.parseInt(args[1]));
                     } else {
                         vkUser = VkParser.parse(args[1]);
@@ -43,8 +43,21 @@ public class Main {
                     System.out.println("Скайп: " + vkUser.getSkype());
                     System.out.println("Инстаграм: " + vkUser.getInstagram());
                     System.out.println("Статус: " + vkUser.getStatus());
-                    System.out.println("Страна: " + vkUser.getCountry().getTitle());
-                    System.out.println("Город: " + vkUser.getCity().getTitle());
+
+                    System.out.print("Страна: ");
+                    if (vkUser.getCountry() != null) {
+                        System.out.println(vkUser.getCountry().getTitle());
+                    } else {
+                        System.out.println();
+                    }
+
+                    System.out.print("Город: ");
+                    if (vkUser.getCity() != null) {
+                        System.out.println(vkUser.getCity().getTitle());
+                    } else {
+                        System.out.println();
+                    }
+
                 } else if (args.length == 4 && args[2].equals("-p")) {
                     VkParser.setFieldsToParse(args[3]);
                     VkUser vkUser;
