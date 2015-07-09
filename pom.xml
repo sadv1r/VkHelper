@@ -13,6 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <main.class>ru.sadv1r.openfms.Main</main.class>
     </properties>
 
     <dependencies>
@@ -129,12 +130,26 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathLayoutType>simple</classpathLayoutType>
-                            <mainClass>ru.sadv1r.openfms.Main</mainClass>
+                            <mainClass>${main.class}</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Version>3</Version>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
             </plugin>
         </plugins>
