@@ -1,5 +1,9 @@
 # OpenFMS
 
+Последний билд:
+-----
+[OpenFMS-1.0.0-SNAPSHOT](http://file.sadv1r.ru/openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar)
+
 Цель:
 -----
 Ведение конкурентной разведки
