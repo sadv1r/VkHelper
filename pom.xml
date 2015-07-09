@@ -13,7 +13,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <main.class>ru.sadv1r.openfms.Main</main.class>
+        <mainClass>ru.sadv1r.openfms.Main</mainClass>
+        <jdk.version>1.7</jdk.version>
     </properties>
 
     <dependencies>
@@ -116,8 +117,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
 
@@ -130,7 +131,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathLayoutType>simple</classpathLayoutType>
-                            <mainClass>${main.class}</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Version>3</Version>
@@ -144,7 +145,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>${main.class}</mainClass>
+                            <mainClass>${mainClass}</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
