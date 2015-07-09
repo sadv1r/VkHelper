@@ -18,11 +18,12 @@ import java.util.*;
 public class VkParser extends Parser {
     private static final Logger logger = Logger.getLogger(VkParser.class);
 
+    private static final int VK_MIN_ID_DEFAULT = 1;
+    private static final int VK_MAX_ID_DEFAULT = 999_999_999;
+    private static final int MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT = 500;
+
     private static final int VK_MIN_ID;
     private static final int VK_MAX_ID;
-    private static final int VK_STRING_MAX_LENGTH;
-    private static final int VK_SITE_MAX_LENGTH;
-    private static final int VK_STATUS_MAX_LENGTH;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE;
 
     private static String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
@@ -32,24 +33,39 @@ public class VkParser extends Parser {
             "tv,books,games,about,quotes,personal,nickname";
 
     static {
-        FileInputStream fileInputStream;
+        //FileInputStream fileInputStream;
         Properties properties = new Properties();
 
-        try {
-            fileInputStream = new FileInputStream("src/main/resources/vk.properties");
+        int vkMinIdTemp = VK_MIN_ID_DEFAULT;
+        int vkMaxIdTemp = VK_MAX_ID_DEFAULT;
+        int maxUsersToParseAtOnceTemp = MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT;
+
+        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/vk.properties")) {
+            //fileInputStream = new FileInputStream("src/main/resources/vk.properties");
             properties.load(fileInputStream);
+
+            if (properties.containsKey("vk.min.id")) {
+                vkMinIdTemp = Integer.parseInt(properties.getProperty("vk.min.id"));
+            }
+            if (properties.containsKey("vk.max.id")) {
+                vkMaxIdTemp = Integer.parseInt(properties.getProperty("vk.max.id"));
+            }
+            if (properties.containsKey("max.users.to.parse.at.once")) {
+                maxUsersToParseAtOnceTemp = Integer.parseInt(properties.getProperty("max.users.to.parse.at.once"));
+            }
         } catch (FileNotFoundException e) {
-            System.err.println("ОШИБКА: Файл свойств отсуствует! Устанавливаем настройки по умолчанию...");
+            logger.warn("Файл свойств отсуствует! Устанавливаем настройки по умолчанию...");
+            vkMinIdTemp = VK_MIN_ID_DEFAULT;
+            vkMaxIdTemp = VK_MAX_ID_DEFAULT;
+            maxUsersToParseAtOnceTemp = MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.fatal("Ошибка чтения файла свойств! Работа будет прекращена!", e);
+            System.exit(1);
         }
 
-        VK_MIN_ID = Integer.parseInt(properties.getProperty("vk.min.id", "1"));
-        VK_MAX_ID = Integer.parseInt(properties.getProperty("vk.max.id", "999999999"));
-        VK_STRING_MAX_LENGTH = Integer.parseInt(properties.getProperty("vk.string.max.length", "50"));
-        VK_SITE_MAX_LENGTH = Integer.parseInt(properties.getProperty("vk.site.max.length", "256"));
-        VK_STATUS_MAX_LENGTH = Integer.parseInt(properties.getProperty("vk.status.max.length", "140"));
-        MAX_USERS_TO_PARSE_AT_ONCE = Integer.parseInt(properties.getProperty("max.users.to.parse.at.once", "500"));
+        VK_MIN_ID = vkMinIdTemp;
+        VK_MAX_ID = vkMaxIdTemp;
+        MAX_USERS_TO_PARSE_AT_ONCE = maxUsersToParseAtOnceTemp;
     }
 
 
