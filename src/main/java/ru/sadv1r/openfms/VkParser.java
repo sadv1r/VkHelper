@@ -21,6 +21,7 @@ public class VkParser extends Parser {
     private static final int VK_MIN_ID_DEFAULT = 1;
     private static final int VK_MAX_ID_DEFAULT = 999_999_999;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT = 500;
+    private static final String PROPERTIES_PATH = "src/main/resources/vk.properties";
 
     private static final int VK_MIN_ID;
     private static final int VK_MAX_ID;
@@ -33,16 +34,17 @@ public class VkParser extends Parser {
             "tv,books,games,about,quotes,personal,nickname";
 
     static {
-        //FileInputStream fileInputStream;
+        logger.trace("Запуск статического блока");
         Properties properties = new Properties();
 
         int vkMinIdTemp = VK_MIN_ID_DEFAULT;
         int vkMaxIdTemp = VK_MAX_ID_DEFAULT;
         int maxUsersToParseAtOnceTemp = MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT;
 
-        try (FileInputStream fileInputStream = new FileInputStream("src/main/resources/vk.properties")) {
-            //fileInputStream = new FileInputStream("src/main/resources/vk.properties");
+        try (FileInputStream fileInputStream = new FileInputStream(PROPERTIES_PATH)) {
+            logger.trace("Файл свойств найден");
             properties.load(fileInputStream);
+            logger.trace("Конфигурация загружена");
 
             if (properties.containsKey("vk.min.id")) {
                 vkMinIdTemp = Integer.parseInt(properties.getProperty("vk.min.id"));
@@ -63,6 +65,8 @@ public class VkParser extends Parser {
         VK_MIN_ID = vkMinIdTemp;
         VK_MAX_ID = vkMaxIdTemp;
         MAX_USERS_TO_PARSE_AT_ONCE = maxUsersToParseAtOnceTemp;
+        logger.info(String.format("Конфигурация: vk.min.id=%d&vk.max.id=%d&max.users.to.parse.at.once=%d&fields=%s",
+                VK_MIN_ID, VK_MAX_ID, MAX_USERS_TO_PARSE_AT_ONCE, fieldsToParse));
     }
 
 
