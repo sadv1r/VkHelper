@@ -1,6 +1,6 @@
 package ru.sadv1r.openfms;
 
-import static org.junit.Assert.*;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -8,22 +8,25 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class VkUserTest {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class VkParserVkUserTest {
     private static final String[] TEST_USERS_SCREEN_NAMES = {"sadv1r", "durov"};
     private static final int[] TEST_USERS_IDS = {9313032, 1};
     private static final int RANDOM_USERS_TO_TEST = 50;
     private static final int TEST_VK_MAX_ID = 300_000_000;
+    private static ValidatorFactory validatorFactory;
     private static Validator validator;
 
     @BeforeClass
     public static void setUp() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+        validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
     }
 
     @Test
@@ -77,5 +80,10 @@ public class VkUserTest {
     @Test
     public void vkUserIsBetepok() throws IOException {
         assertEquals("http://ктогей.рф", VkParser.parse(7364710).getSite());
+    }
+
+    @AfterClass
+    public static void tearDown() throws Exception {
+        validatorFactory.close();
     }
 }
