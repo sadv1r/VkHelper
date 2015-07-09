@@ -55,9 +55,6 @@ public class VkParser extends Parser {
             }
         } catch (FileNotFoundException e) {
             logger.warn("Файл свойств отсуствует! Устанавливаем настройки по умолчанию...");
-            vkMinIdTemp = VK_MIN_ID_DEFAULT;
-            vkMaxIdTemp = VK_MAX_ID_DEFAULT;
-            maxUsersToParseAtOnceTemp = MAX_USERS_TO_PARSE_AT_ONCE_DEFAULT;
         } catch (IOException e) {
             logger.fatal("Ошибка чтения файла свойств! Работа будет прекращена!", e);
             System.exit(1);
