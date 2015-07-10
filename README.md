@@ -15,6 +15,10 @@ java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользо�
 ```
 java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользователя> -p FirstName
 ```
+Для получения списка участников группы:
+```
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -<id группы>
+```
 
 Цель:
 -----
