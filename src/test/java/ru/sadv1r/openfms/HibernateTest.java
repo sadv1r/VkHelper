@@ -14,13 +14,13 @@ import static org.junit.Assert.assertTrue;
  * @version 0.1
  */
 public class HibernateTest {
-    @Ignore
+    //@Ignore
     @Before
     public void setUp() throws Exception {
         HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnitTest");
     }
 
-    @Ignore
+    //@Ignore
     @Test
     public void getEntityManagerFactory() throws Exception {
         assertTrue(HibernateUtil.getEntityManagerFactory().isOpen());
@@ -45,7 +45,7 @@ public class HibernateTest {
         entityManager.close();
     }*/
 
-    @Ignore
+    //@Ignore
     @After
     public void tearDown() throws Exception {
         HibernateUtil.closeEntityManagerFactory();
