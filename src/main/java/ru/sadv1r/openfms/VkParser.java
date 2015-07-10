@@ -25,8 +25,8 @@ public class VkParser extends Parser {
     private static final int VK_MAX_ID;
     private static final int MAX_USERS_TO_PARSE_AT_ONCE;
 
-    private static String fieldsToParse = "sex,bdate,city,country,photo_50,photo_100,photo_200_orig,photo_200,photo_400_orig," +
-            "photo_max,photo_max_orig,photo_id,online,online_mobile,domain,has_mobile,contacts,connections,site," +
+    private static String fieldsToParse = "sex,bdate,city,country," +
+            "photo_max_orig,online,online_mobile,has_mobile,contacts,connections,site," +
             "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
             "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
             "tv,books,games,about,quotes,personal,nickname";
