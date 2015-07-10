@@ -388,8 +388,8 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @JsonProperty("photo_id")
-    private int photoId;
+    @JsonProperty("photo_max_orig")
+    private String profilePhotoUrl;
 
     @JsonProperty("site")
     private String site;
@@ -519,13 +519,13 @@ public class VkUser extends User implements Serializable {
         this.universities = universities;
     }
 
-    public int getPhotoId() {
-        return photoId;
+    public String getProfilePhotoUrl() {
+        return profilePhotoUrl;
     }
 
-    @JsonSetter("photo_id")
-    public void setPhotoId(String photoId) {
-        this.photoId = Integer.parseInt(photoId.split("_")[1]);
+    @JsonSetter("photo_max_orig")
+    public void setProfilePhotoUrl(String profilePhotoUrl) {
+        this.profilePhotoUrl = profilePhotoUrl;
     }
 
     public String getSite() {
