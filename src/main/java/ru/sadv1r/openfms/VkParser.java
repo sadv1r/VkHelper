@@ -27,9 +27,10 @@ public class VkParser extends Parser {
 
     private static String fieldsToParse = "sex,bdate,city,country," +
             "photo_max_orig,online,online_mobile,has_mobile,contacts,connections,site," +
-            "education,universities,schools,can_post,can_see_all_posts,can_see_audio,can_write_private_message,status," +
+            "education,universities,schools,status," +
             "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
             "tv,books,games,about,quotes,personal,nickname";
+    //unused now: can_post,can_see_all_posts,can_see_audio,can_write_private_message
 
     static {
         logger.trace("Запуск статического блока");
