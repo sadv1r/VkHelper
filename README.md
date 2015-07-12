@@ -9,15 +9,19 @@
 -----
 Для получения всей информации:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользователя>
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -domain <id пользователя или screenName>
 ```
 Для получения конкретного поля:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk <id пользователя> -p FirstName
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -domain <id пользователя или screenName> -p FirstName
+```
+Для получения списка скрытых друзей пользователя (находит не всех):
+```
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -hidden <id пользователя>
 ```
 Для получения списка участников группы:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -<id группы>
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -domain -<id группы>
 ```
 
 Цель:
