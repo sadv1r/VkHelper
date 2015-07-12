@@ -25,13 +25,13 @@ public abstract class Parser {
      * @return JsonNode объект
      */
     protected static JsonNode getJsonNodeFromApi(String stringUrl) throws IOException {
-        final int numberOfAttempts = 3;
-        final int multiplier = 2;
+        final int numberOfReconnectionAttempts = 3;
+        final int millisMultiplier = 2;
         long waitingMillisBetweenAttempts = 500;
 
         ObjectMapper mapper = new ObjectMapper();
         URL url = new URL(stringUrl);
-        double maximumWaitingMillisBetweenAttempts = waitingMillisBetweenAttempts * (Math.pow(multiplier, numberOfAttempts - 1));
+        double maximumWaitingMillisBetweenAttempts = waitingMillisBetweenAttempts * (Math.pow(millisMultiplier, numberOfReconnectionAttempts - 1));
 
         try {
             return mapper.readTree(url);
@@ -40,7 +40,7 @@ public abstract class Parser {
                 try {
                     return mapper.readTree(url);
                 } catch (ConnectException e1) {
-                    waitingMillisBetweenAttempts *= multiplier;
+                    waitingMillisBetweenAttempts *= millisMultiplier;
                 }
 
                 try {
