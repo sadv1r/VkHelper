@@ -565,7 +565,7 @@ public class VkUser extends User implements Serializable {
 
     @JsonSetter("status")
     public void setStatus(String status) {
-        this.status = status.replaceAll("\\p{S}", "").replaceAll("\\\\", "");
+        this.status = status.replaceAll("\\p{S}", "").replaceAll("\\xF0", "").replaceAll("[^\\\\x00-\\\\xFF]", "");
     }
 
     public String getSkype() {
