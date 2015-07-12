@@ -205,14 +205,14 @@ public class VkParser extends Parser {
         }
     }
 
-    private static Set<Integer> parseFriends(int vkId) throws IOException {
+    public static ArrayList<Integer> parseFriends(int vkId) throws IOException {
         String documentToParse = "https://api.vk.com/method/friends.get?v=5.24&user_id=" + vkId;
         JsonNode friendsGetResult = getJsonNodeFromApi(documentToParse);
         if (!friendsGetResult.hasNonNull("response")) {
-            return new HashSet<Integer>();
+            return new ArrayList<>();
         } else {
             friendsGetResult = friendsGetResult.get("response").get("items");
-            Set<Integer> friends = new HashSet<>(friendsGetResult.size());
+            ArrayList<Integer> friends = new ArrayList<>(friendsGetResult.size());
             for (JsonNode node : friendsGetResult) {
                 friends.add(node.asInt());
             }
