@@ -5,6 +5,7 @@ import javax.persistence.EntityTransaction;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Внимание! Класс содержит адову кучу говнокода!
@@ -18,36 +19,38 @@ public class Main {
         if ("-vk".equals(args[0])) {
             if ("-hidden".equals(args[1]) && args.length == 3) {
                 if (args[2].matches("\\d+")) {
-                    System.out.println("Ищем скрытых друзей:");
-                    ArrayList<Integer> hiddenFriends = new ArrayList<>();
+                    HashSet<Integer> hiddenFriends = new HashSet<>();
 
                     int targetId = Integer.parseInt(args[2]);
-                    System.out.println("Достаем друзей");
                     ArrayList<Integer> targetFriends = VkParser.parseFriends(targetId); //друзья
-                    System.out.println("Достал друзей");
                     int a = 0, b;
-
-
-                    for (int targetFriend : targetFriends) {
-                        ArrayList<Integer> friendsOfTargetFriend = VkParser.parseFriends(targetFriend); //друзья друзей
-                        b = 0;
-                        for (int friendOfTargetFriend : friendsOfTargetFriend) {
-                            ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
-                            for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
-                                if (targetId == friendOfFriendOfTargetFriend) {
-                                    hiddenFriends.add(friendOfTargetFriend);
+                    try {
+                        for (int targetFriend : targetFriends) {
+                            ArrayList<Integer> friendsOfTargetFriend = VkParser.parseFriends(targetFriend); //друзья друзей
+                            b = 0;
+                            for (int friendOfTargetFriend : friendsOfTargetFriend) {
+                                ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
+                                for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
+                                    if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfFriendOfTargetFriend)) {
+                                        hiddenFriends.add(friendOfTargetFriend);
+                                    }
                                 }
-                                System.out.println(b * 100 / friendsOfTargetFriend.size() + "% друзей друзей выполнено");
-                                System.out.println(a * 100 / targetFriends.size() + "% всего выполнено");
+                                System.out.println(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
+                                        "% выполнено на текущей стадии");
                             }
-                            b++;
+                            a++;
                         }
-                        a++;
+                    } catch (Exception e) {
+                        System.out.println("Работа не была завершена. Все, что удалось найти:");
+                        for (int i : hiddenFriends) {
+                            System.out.println(i);
+                        }
+                        throw e;
                     }
+
                     for (int i : hiddenFriends) {
                         System.out.println(i);
                     }
-
                 }
             }
         }
@@ -57,61 +60,61 @@ public class Main {
             /*Работаем с Вконтакте*/
             if (args[0].equals("-vk")) {//{args.length >= 2)
                 if (args.length == 2) {
+                    /*Полный парсинг пользователей ВК*/
+                    if (args[1].equals("-all")) {
+                        HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
+                        int a = 1;
+                        int[] ids = new int[500];
 
+                        while (true) {
+                            for (int i = 0; i < 500; i++) {
+                                ids[i] = a + i;
+                                System.out.println(a + i);
+                            }
+
+                            ArrayList<VkUser> vkUsers = VkParser.parse(ids);
+                            for (VkUser vkUserg : vkUsers) {
+                                try {
+                                    EntityManager entityManager = HibernateUtil.getEntityManager();
+                                    EntityTransaction entityTransaction = entityManager.getTransaction();
+                                    entityTransaction.begin();
+
+                                    entityManager.merge(vkUserg);
+
+                                    entityTransaction.commit();
+                                    entityManager.close();
+                                } catch (Exception e) {
+
+                                }
+                            }
+                            a += 500;
+                        }
+                    }
                 } else if (args.length == 3) {
                     /*Адрес цели*/
                     if (args[1].equals("-domain")) {
                         VkUser vkUser;
                         /*id*/
                         if (args[2].matches("\\d+")) { //FIXME!!! Делать запрос через vk.utils.resolveScreenName и понимать, что является целью
-                            vkUser = VkParser.parse(Integer.parseInt(args[1]));
+                            vkUser = VkParser.parse(Integer.parseInt(args[2]));
                             printUserInfo(vkUser);
                         /*Группа*/
                         } else if (args[2].matches("-\\d+")) {
-                            System.out.println(VkGroupParser.parseUsers(Integer.parseInt(args[1].replace("-", ""))));
-                        /*Полный парсинг пользователей ВК*/
-                        } else if (args[2].equals("-all")) {
-                            HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
-                            int a = 1;
-                            int[] ids = new int[500];
-
-                            while (true) {
-                                for (int i = 0; i < 500; i++) {
-                                    ids[i] = a + i;
-                                    System.out.println(a + i);
-                                }
-
-                                ArrayList<VkUser> vkUsers = VkParser.parse(ids);
-                                for (VkUser vkUserg : vkUsers) {
-                                    try {
-                                        EntityManager entityManager = HibernateUtil.getEntityManager();
-                                        EntityTransaction entityTransaction = entityManager.getTransaction();
-                                        entityTransaction.begin();
-
-                                        entityManager.merge(vkUserg);
-
-                                        entityTransaction.commit();
-                                        entityManager.close();
-                                    } catch (Exception e) {
-
-                                    }
-                                }
-                                a += 500;
-                            }
+                            System.out.println(VkGroupParser.parseUsers(Integer.parseInt(args[2].replace("-", ""))));
                         }
                     }
-                } else if (args.length == 4 && args[2].equals("-p")) {
-                    VkParser.setFieldsToParse(args[3]);
+                } else if (args.length == 5 && args[3].equals("-p")) {
+                    VkParser.setFieldsToParse(args[4]);
                     VkUser vkUser;
-                    if (args[1].matches("\\d")) {
-                        vkUser = VkParser.parse(Integer.parseInt(args[1]));
+                    if (args[2].matches("\\d+")) {
+                        vkUser = VkParser.parse(Integer.parseInt(args[2]));
                     } else {
-                        vkUser = VkParser.parse(args[1]);
+                        vkUser = VkParser.parse(args[2]);
                     }
 
                     Class clazz = vkUser.getClass();
 
-                    System.out.println(clazz.getDeclaredMethod("get" + args[3]).invoke(vkUser));
+                    System.out.println(clazz.getDeclaredMethod("get" + args[4]).invoke(vkUser));
 
                 } else {
                     System.out.println("Не верная конфигурация");
