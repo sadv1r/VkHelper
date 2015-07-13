@@ -31,7 +31,7 @@ public class Main {
                             for (int friendOfTargetFriend : friendsOfTargetFriend) {
                                 ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
                                 for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
-                                    if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfFriendOfTargetFriend)) {
+                                    if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfTargetFriend)) {
                                         hiddenFriends.add(friendOfTargetFriend);
                                     }
                                 }
