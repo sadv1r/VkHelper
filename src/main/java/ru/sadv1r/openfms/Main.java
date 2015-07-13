@@ -35,11 +35,12 @@ public class Main {
                                         hiddenFriends.add(friendOfTargetFriend);
                                     }
                                 }
-                                System.out.println(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
-                                        "% выполнено на текущей стадии");
+                                System.out.print(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
+                                        "% выполнено на текущей стадии" + "\r");
                             }
                             a++;
                         }
+                        System.out.println();
                     } catch (Exception e) {
                         System.out.println("Работа не была завершена. Все, что удалось найти:");
                         for (int i : hiddenFriends) {
