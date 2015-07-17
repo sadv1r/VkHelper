@@ -189,7 +189,7 @@ public class VkParser extends Parser {
      * @return Уникальный идентификатор пользователя <b>id</b>
      * @throws IOException
      */
-    private static int getUserId(String screenName) throws IOException {
+    public static int getUserId(String screenName) throws IOException {
         logger.trace("Запуск метода getUserId(String)");
         String vkApiResolveScreenNameUrl = "https://api.vk.com/method/utils.resolveScreenName?screen_name=";
         logger.trace("Получаем id пользователя \"" + screenName + "\"");
