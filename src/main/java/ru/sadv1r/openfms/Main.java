@@ -1,5 +1,7 @@
 package ru.sadv1r.openfms;
 
+import org.apache.commons.cli.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.IOException;
@@ -15,8 +17,114 @@ import java.util.HashSet;
  * @version 0.1
  */
 public class Main {
-    public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if ("-vk".equals(args[0])) {
+    private static final String COMMAND_LINE_SYNTAX = "java -jar openfms-[version].jar";
+
+    public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, ParseException {
+        Options options = new Options();
+
+        OptionGroup mainOptionGroup = new OptionGroup();
+        mainOptionGroup.setRequired(true);
+        mainOptionGroup.addOption(new Option("h", "help", false, "вывод этого сообщения"));
+        mainOptionGroup.addOption(new Option("vk", "vkontakte", false, "работаем с Вконтакте"));
+        /*mainOptionGroup.addOption(Option.builder("vk")
+                .longOpt("vkontakte")
+                .desc("работаем с Вконтакте\n"
+                        + "в качестве аргумента можно передавать id пользователя,\n"
+                        + "id группы (перед id группы ставим -) или screenName")
+                .argName("domain")
+                .optionalArg(true)
+                .build());*/
+        options.addOptionGroup(mainOptionGroup);
+
+        OptionGroup targetTypeOptionGroup = new OptionGroup();
+        targetTypeOptionGroup.addOption(Option.builder("u")
+                .longOpt("user")
+                .desc("id или screenName пользователя")
+                .hasArg()
+                .argName("domain")
+                .build());
+        targetTypeOptionGroup.addOption(Option.builder("g")
+                .longOpt("group")
+                .desc("id или screenName группы")
+                .hasArg()
+                .argName("domain")
+                .build());
+        options.addOptionGroup(targetTypeOptionGroup);
+
+        OptionGroup actionOptionGroup = new OptionGroup();
+        actionOptionGroup.addOption(new Option("H", "hidden", false, "поиск скрытых друзей"));
+        actionOptionGroup.addOption(new Option("gu", "group-users", false, "получить список пользователей группы"));
+        actionOptionGroup.addOption(new Option("A", "all", false, "сохраняем всех пользователей (недоступно)"));
+        actionOptionGroup.addOption(Option.builder("i")
+                .longOpt("info")
+                .desc("получить информацию о пользователе\n"
+                        + "в качестве аргумента можно передать необходимые поля.\n"
+                        + "Например: -i id,firstName,lastName\n"
+                        + "Полный список доступных полей:\n"
+                        + "sex,bdate,city,country," +
+                        "photo_max_orig,online,online_mobile,has_mobile,contacts,connections,site," +
+                        "education,universities,schools,status," +
+                        "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies," +
+                        "tv,books,games,about,quotes,personal,nickname")
+                .argName("fields")
+                .optionalArg(true)
+                .build());
+        options.addOptionGroup(actionOptionGroup);
+
+        CommandLineParser commandLineParser = new DefaultParser();
+        CommandLine commandLine = commandLineParser.parse(options, args);
+
+        if (commandLine.hasOption("h")) {
+            HelpFormatter helpFormatter = new HelpFormatter();
+            helpFormatter.printHelp(COMMAND_LINE_SYNTAX, options, true);
+        }
+
+        /* РАБОТАЕМ С ВК */
+        else if (commandLine.hasOption("vk")) {
+            if (commandLine.hasOption("H")) {
+                String targetDomain = commandLine.getOptionValue("vk");
+                int targetId = 1; //FIXME! VkParser.getUserId
+                HashSet<Integer> hiddenFriends = new HashSet<>();
+
+                ArrayList<Integer> targetFriends = VkParser.parseFriends(targetId); //друзья
+                int a = 0, b;
+                try {
+                    for (int targetFriend : targetFriends) {
+                        ArrayList<Integer> friendsOfTargetFriend = VkParser.parseFriends(targetFriend); //друзья друзей
+                        b = 0;
+                        for (int friendOfTargetFriend : friendsOfTargetFriend) {
+                            ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
+                            for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
+                                if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfTargetFriend)) {
+                                    hiddenFriends.add(friendOfTargetFriend);
+                                }
+                            }
+                            System.out.print(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
+                                    "% выполнено на текущей стадии" + "\r");
+                        }
+                        a++;
+                    }
+                    System.out.println();
+                } catch (Exception e) {
+                    System.out.println("Работа не была завершена. Все, что удалось найти:");
+                    for (int i : hiddenFriends) {
+                        System.out.println(i);
+                    }
+                    throw e;
+                }
+
+                for (int i : hiddenFriends) {
+                    System.out.println(i);
+                }
+            } else if (commandLine.hasOption("i")) {
+                String targetDomain = commandLine.getOptionValue("vk");
+                int targetId = 1; //FIXME! VkParser.getUserId
+                VkUser vkUser = VkParser.parse(targetId);
+                printUserInfo(vkUser);
+            }
+        }
+
+        /*if ("-vk".equals(args[0])) {
             if ("-hidden".equals(args[1]) && args.length == 3) {
                 if (args[2].matches("\\d+")) {
                     HashSet<Integer> hiddenFriends = new HashSet<>();
@@ -54,7 +162,7 @@ public class Main {
                     }
                 }
             }
-        }
+        }*/
 
         /*Если аргументы есть*/
         if (args.length > 0) {
