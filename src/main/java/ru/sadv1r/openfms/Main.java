@@ -82,8 +82,14 @@ public class Main {
         /* РАБОТАЕМ С ВК */
         else if (commandLine.hasOption("vk")) {
             if (commandLine.hasOption("H")) {
-                String targetDomain = commandLine.getOptionValue("vk");
-                int targetId = 1; //FIXME! VkParser.getUserId
+                String targetDomain = commandLine.getOptionValue("u");
+                int targetId;
+                //FIXME! повторяющуюся конструкцию if-ов нужно перенести куда-то. Возможно в VkParser
+                if (targetDomain.matches("\\d+")) {
+                    targetId = Integer.parseInt(targetDomain);
+                } else {
+                    targetId = VkParser.getUserId(targetDomain);
+                }
                 HashSet<Integer> hiddenFriends = new HashSet<>();
 
                 ArrayList<Integer> targetFriends = VkParser.parseFriends(targetId); //друзья
@@ -117,8 +123,13 @@ public class Main {
                     System.out.println(i);
                 }
             } else if (commandLine.hasOption("i")) {
-                String targetDomain = commandLine.getOptionValue("vk");
-                int targetId = 1; //FIXME! VkParser.getUserId
+                String targetDomain = commandLine.getOptionValue("u");
+                int targetId;
+                if (targetDomain.matches("\\d+")) {
+                    targetId = Integer.parseInt(targetDomain);
+                } else {
+                    targetId = VkParser.getUserId(targetDomain);
+                }
                 VkUser vkUser = VkParser.parse(targetId);
                 printUserInfo(vkUser);
             }
