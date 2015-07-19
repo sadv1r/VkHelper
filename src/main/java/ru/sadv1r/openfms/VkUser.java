@@ -3,7 +3,6 @@ package ru.sadv1r.openfms;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,7 +16,6 @@ import java.util.Set;
  * @version 1.0
  */
 @Entity
-@Audited
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -53,7 +51,6 @@ public class VkUser extends User implements Serializable {
     private City city;
 
     @Entity
-    @Audited
     public static class City implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_CITY_MIN_ID = 1;
@@ -90,7 +87,6 @@ public class VkUser extends User implements Serializable {
     private Country country;
 
     @Entity
-    @Audited
     public static class Country implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_COUNTRY_MIN_ID = 1;
@@ -121,7 +117,6 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @Transient
     @ManyToOne
     @JoinColumn(name="id", foreignKey = @ForeignKey(name = "FK_SCHOOL"))
     @JsonProperty("schools")
@@ -293,7 +288,7 @@ public class VkUser extends User implements Serializable {
 
         @JsonProperty("name")
         private String name;
-        
+
         @JsonProperty("faculty")
         private int faculty;
 
