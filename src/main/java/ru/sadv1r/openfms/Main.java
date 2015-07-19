@@ -20,12 +20,16 @@ public class Main {
     private static final String COMMAND_LINE_SYNTAX = "java -jar openfms-[version].jar";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, ParseException {
-        Options options = new Options();
+                /* Если аргументов нет */
+        if (args.length == 0) {
+            System.out.println("Необходимо задать аругменты. Для справки воспользуйтесь -h");
+        } else {
+            Options options = new Options();
 
-        OptionGroup mainOptionGroup = new OptionGroup();
-        mainOptionGroup.setRequired(true);
-        mainOptionGroup.addOption(new Option("h", "help", false, "вывод этого сообщения"));
-        mainOptionGroup.addOption(new Option("vk", "vkontakte", false, "работаем с Вконтакте"));
+            OptionGroup mainOptionGroup = new OptionGroup();
+            mainOptionGroup.setRequired(true);
+            mainOptionGroup.addOption(new Option("h", "help", false, "вывод этого сообщения"));
+            mainOptionGroup.addOption(new Option("vk", "vkontakte", false, "работаем с Вконтакте"));
         /*mainOptionGroup.addOption(Option.builder("vk")
                 .longOpt("vkontakte")
                 .desc("работаем с Вконтакте\n"
@@ -34,29 +38,29 @@ public class Main {
                 .argName("domain")
                 .optionalArg(true)
                 .build());*/
-        options.addOptionGroup(mainOptionGroup);
+            options.addOptionGroup(mainOptionGroup);
 
-        OptionGroup targetTypeOptionGroup = new OptionGroup();
-        targetTypeOptionGroup.addOption(Option.builder("u")
-                .longOpt("user")
-                .desc("id или screenName пользователя")
-                .hasArg()
-                .argName("domain")
-                .build());
-        targetTypeOptionGroup.addOption(Option.builder("g")
-                .longOpt("group")
-                .desc("id или screenName группы")
-                .hasArg()
-                .argName("domain")
-                .build());
-        options.addOptionGroup(targetTypeOptionGroup);
+            OptionGroup targetTypeOptionGroup = new OptionGroup();
+            targetTypeOptionGroup.addOption(Option.builder("u")
+                    .longOpt("user")
+                    .desc("id или screenName пользователя")
+                    .hasArg()
+                    .argName("domain")
+                    .build());
+            targetTypeOptionGroup.addOption(Option.builder("g")
+                    .longOpt("group")
+                    .desc("id или screenName группы")
+                    .hasArg()
+                    .argName("domain")
+                    .build());
+            options.addOptionGroup(targetTypeOptionGroup);
 
-        OptionGroup actionOptionGroup = new OptionGroup();
-        actionOptionGroup.addOption(new Option("H", "hidden", false, "поиск скрытых друзей"));
-        actionOptionGroup.addOption(new Option("gu", "group-users", false, "получить список пользователей группы"));
-        actionOptionGroup.addOption(new Option("A", "all", false, "сохраняем всех пользователей (недоступно)"));
-        actionOptionGroup.addOption(new Option("i", "info", false, "получить информацию о пользователе"));
-        options.addOptionGroup(actionOptionGroup);
+            OptionGroup actionOptionGroup = new OptionGroup();
+            actionOptionGroup.addOption(new Option("H", "hidden", false, "поиск скрытых друзей"));
+            actionOptionGroup.addOption(new Option("gu", "group-users", false, "получить список пользователей группы"));
+            actionOptionGroup.addOption(new Option("A", "all", false, "сохраняем всех пользователей (необходима база)"));
+            actionOptionGroup.addOption(new Option("i", "info", false, "получить информацию о пользователе"));
+            options.addOptionGroup(actionOptionGroup);
 
         /*options.addOption(Option.builder("f")
                 .longOpt("fields")
@@ -74,128 +78,136 @@ public class Main {
                 .valueSeparator(',')
                 .build());*/
 
-        options.addOption(Option.builder("f")
-                .longOpt("fields")
-                .desc("установить кастомные поля\n"
-                        + "Например: -а sex,bdate,city\n"
-                        + "Полный список доступных полей:\n"
-                        + "sex,bdate,city,country,"
-                        + "photo_max_orig,online,online_mobile,has_mobile,contacts,connections,site,"
-                        + "education,universities,schools,status,"
-                        + "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies,"
-                        + "tv,books,games,about,quotes,personal,nickname")
-                .hasArg()
-                .argName("fields")
-                .build());
+            options.addOption(Option.builder("f")
+                    .longOpt("fields")
+                    .desc("установить кастомные поля\n"
+                            + "Например: -а sex,bdate,city\n"
+                            + "Полный список доступных полей:\n"
+                            + "sex,bdate,city,country,"
+                            + "photo_max_orig,online,online_mobile,has_mobile,contacts,connections,site,"
+                            + "education,universities,schools,status,"
+                            + "last_seen,relation,relatives,counters,screen_name,maiden_name,occupation,activities,interests,music,movies,"
+                            + "tv,books,games,about,quotes,personal,nickname")
+                    .hasArg()
+                    .argName("fields")
+                    .build());
 
-        CommandLineParser commandLineParser = new DefaultParser();
-        CommandLine commandLine = commandLineParser.parse(options, args);
+            CommandLineParser commandLineParser = new DefaultParser();
+            CommandLine commandLine = commandLineParser.parse(options, args);
 
-        if (commandLine.hasOption("h")) {
-            HelpFormatter helpFormatter = new HelpFormatter();
-            helpFormatter.printHelp(COMMAND_LINE_SYNTAX, options, true);
-        }
+            /* help */
+            if (commandLine.hasOption("h")) {
+                HelpFormatter helpFormatter = new HelpFormatter();
+                helpFormatter.printHelp(COMMAND_LINE_SYNTAX, options, true);
+            }
 
-        /* РАБОТАЕМ С ВК */
-        else if (commandLine.hasOption("vk")) {
-            if (commandLine.hasOption("f")) {
-                //String fields[] = commandLine.getOptionValues("f");
-                String fields = commandLine.getOptionValue("f");
-                VkParser.setFieldsToParse(fields);
+            /* vk */
+            else if (commandLine.hasOption("vk")) {
+                if (commandLine.hasOption("f")) {
+                    //String fields[] = commandLine.getOptionValues("f");
+                    String fields = commandLine.getOptionValue("f");
+                    VkParser.setFieldsToParse(fields);
 
                 /* Вызываем нужный метод через рефлешен
                 Class clazz = vkUser.getClass();
                 System.out.println(clazz.getDeclaredMethod("get" + args[4]).invoke(vkUser));*/
-            }
-
-            if (commandLine.hasOption("H")) {
-                String targetDomain = commandLine.getOptionValue("u");
-                int targetId;
-                //FIXME! повторяющуюся конструкцию if-ов нужно перенести куда-то. Возможно в VkParser
-                if (targetDomain.matches("\\d+")) {
-                    targetId = Integer.parseInt(targetDomain);
-                } else {
-                    targetId = VkParser.getUserId(targetDomain);
                 }
-                HashSet<Integer> hiddenFriends = new HashSet<>();
 
-                ArrayList<Integer> targetFriends = VkParser.parseFriends(targetId); //друзья
-                int a = 0, b;
-                try {
-                    for (int targetFriend : targetFriends) {
-                        ArrayList<Integer> friendsOfTargetFriend = VkParser.parseFriends(targetFriend); //друзья друзей
-                        b = 0;
-                        for (int friendOfTargetFriend : friendsOfTargetFriend) {
-                            ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
-                            for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
-                                if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfTargetFriend)) {
-                                    hiddenFriends.add(friendOfTargetFriend);
-                                }
-                            }
-                            System.out.print(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
-                                    "% выполнено на текущей стадии" + "\r");
-                        }
-                        a++;
+                if (commandLine.hasOption("H")) {
+                    String targetDomain = commandLine.getOptionValue("u");
+                    int targetId;
+                    //FIXME! повторяющуюся конструкцию if-ов нужно перенести куда-то. Возможно в VkParser
+                    if (targetDomain.matches("\\d+")) {
+                        targetId = Integer.parseInt(targetDomain);
+                    } else {
+                        targetId = VkParser.getUserId(targetDomain);
                     }
-                    System.out.println();
-                } catch (Exception e) {
-                    System.out.println("Работа не была завершена. Все, что удалось найти:");
+                    HashSet<Integer> hiddenFriends = new HashSet<>();
+
+                    ArrayList<Integer> targetFriends = VkParser.parseFriends(targetId); //друзья
+                    int a = 0, b;
+                    try {
+                        for (int targetFriend : targetFriends) {
+                            ArrayList<Integer> friendsOfTargetFriend = VkParser.parseFriends(targetFriend); //друзья друзей
+                            b = 0;
+                            for (int friendOfTargetFriend : friendsOfTargetFriend) {
+                                ArrayList<Integer> friendsOfFriendsOfTargetFriend = VkParser.parseFriends(friendOfTargetFriend); //друзья друзей друзей
+                                for (int friendOfFriendOfTargetFriend : friendsOfFriendsOfTargetFriend) {
+                                    if (targetId == friendOfFriendOfTargetFriend && !targetFriends.contains(friendOfTargetFriend)) {
+                                        hiddenFriends.add(friendOfTargetFriend);
+                                    }
+                                }
+                                System.out.print(a * 100 / targetFriends.size() + "% выполнено всего. " + b++ * 100 / friendsOfTargetFriend.size() +
+                                        "% выполнено на текущей стадии" + "\r");
+                            }
+                            a++;
+                        }
+                        System.out.println();
+                    } catch (Exception e) {
+                        System.out.println("Работа не была завершена. Все, что удалось найти:");
+                        for (int i : hiddenFriends) {
+                            System.out.println(i);
+                        }
+                        throw e;
+                    }
+
                     for (int i : hiddenFriends) {
                         System.out.println(i);
                     }
-                    throw e;
-                }
-
-                for (int i : hiddenFriends) {
-                    System.out.println(i);
-                }
-            } else if (commandLine.hasOption("i")) {
-                String targetDomain = commandLine.getOptionValue("u");
-                int targetId;
-                if (targetDomain.matches("\\d+")) {
-                    targetId = Integer.parseInt(targetDomain);
-                } else {
-                    targetId = VkParser.getUserId(targetDomain);
-                }
-                VkUser vkUser = VkParser.parse(targetId);
-                printUserInfo(vkUser);
-            } else if (commandLine.hasOption("all")) {
-                HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
-                int a = 1;
-                int[] ids = new int[500];
-
-                while (true) {
-                    for (int i = 0; i < 500; i++) {
-                        ids[i] = a + i;
-                        System.out.println(a + i);
+                } else if (commandLine.hasOption("i")) {
+                    String targetDomain = commandLine.getOptionValue("u");
+                    int targetId;
+                    if (targetDomain.matches("\\d+")) {
+                        targetId = Integer.parseInt(targetDomain);
+                    } else {
+                        targetId = VkParser.getUserId(targetDomain);
                     }
+                    VkUser vkUser = VkParser.parse(targetId);
+                    printUserInfo(vkUser);
+                } else if (commandLine.hasOption("all")) {
+                    HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
+                    int a = 1;
+                    int[] ids = new int[500];
 
-                    ArrayList<VkUser> vkUsers = VkParser.parse(ids);
-                    for (VkUser vkUser : vkUsers) {
-                        try { //FIXME! сделать уже что-то с этим костылем
-                            EntityManager entityManager = HibernateUtil.getEntityManager();
-                            EntityTransaction entityTransaction = entityManager.getTransaction();
-                            entityTransaction.begin();
-
-                            entityManager.merge(vkUser);
-
-                            entityTransaction.commit();
-                            entityManager.close();
-                        } catch (Exception e) {
-
+                    while (true) {
+                        for (int i = 0; i < 500; i++) {
+                            ids[i] = a + i;
+                            System.out.println(a + i);
                         }
+
+                        ArrayList<VkUser> vkUsers = VkParser.parse(ids);
+                        for (VkUser vkUser : vkUsers) {
+                            try { //FIXME! сделать уже что-то с этим костылем
+                                EntityManager entityManager = HibernateUtil.getEntityManager();
+                                EntityTransaction entityTransaction = entityManager.getTransaction();
+                                entityTransaction.begin();
+
+                                entityManager.merge(vkUser);
+
+                                entityTransaction.commit();
+                                entityManager.close();
+                            } catch (Exception e) {
+
+                            }
+                        }
+                        a += 500;
                     }
-                    a += 500;
-                }
-            } else if (commandLine.hasOption("gu")) {
-                String targetDomain = commandLine.getOptionValue("g");
-                int targetId;
-                if (targetDomain.matches("\\d+")) {
-                    targetId = Integer.parseInt(targetDomain);
+                } else if (commandLine.hasOption("gu")) {
+                    String targetDomain = commandLine.getOptionValue("g");
+                    int targetId;
+                    if (targetDomain.matches("\\d+")) {
+                        targetId = Integer.parseInt(targetDomain);
+                    } else {
+                        targetId = VkParser.getUserId(targetDomain);
+                    }
+                    System.out.println(VkGroupParser.parseUsers(targetId)); //FIXME! построчный вывод каждого id в parseUsers (не всем скопом)
                 } else {
-                    targetId = VkParser.getUserId(targetDomain);
+                    System.out.println("Неверные аругменты. Для справки воспользуйтесь -h");
                 }
-                System.out.println(VkGroupParser.parseUsers(targetId)); //FIXME! построчный вывод каждого id в parseUsers (не всем скопом)
+            }
+            /* Не -vk и не -h */
+            else {
+                System.out.println("Неверные аругменты. Для справки воспользуйтесь -h");
             }
         }
 
