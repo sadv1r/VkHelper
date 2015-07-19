@@ -60,6 +60,7 @@ public class Main {
             actionOptionGroup.addOption(new Option("gu", "group-users", false, "получить список пользователей группы"));
             actionOptionGroup.addOption(new Option("A", "all", false, "сохраняем всех пользователей (необходима база)"));
             actionOptionGroup.addOption(new Option("i", "info", false, "получить информацию о пользователе"));
+            actionOptionGroup.addOption(new Option("F", "friends", false, "получить список друзей пользователя"));
             options.addOptionGroup(actionOptionGroup);
 
         /*options.addOption(Option.builder("f")
@@ -164,6 +165,15 @@ public class Main {
                     }
                     VkUser vkUser = VkParser.parse(targetId);
                     printUserInfo(vkUser);
+                } else if (commandLine.hasOption("F")) {
+                    String targetDomain = commandLine.getOptionValue("u");
+                    int targetId;
+                    if (targetDomain.matches("\\d+")) {
+                        targetId = Integer.parseInt(targetDomain);
+                    } else {
+                        targetId = VkParser.getUserId(targetDomain);
+                    }
+                    System.out.println(VkParser.parseFriends(targetId));
                 } else if (commandLine.hasOption("all")) {
                     HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
                     int a = 1;
@@ -172,8 +182,9 @@ public class Main {
                     while (true) {
                         for (int i = 0; i < 500; i++) {
                             ids[i] = a + i;
-                            System.out.println(a + i);
+                            System.out.print(a + i + "\r");
                         }
+                        System.out.println();
 
                         ArrayList<VkUser> vkUsers = VkParser.parse(ids);
                         for (VkUser vkUser : vkUsers) {
@@ -181,13 +192,12 @@ public class Main {
                                 EntityManager entityManager = HibernateUtil.getEntityManager();
                                 EntityTransaction entityTransaction = entityManager.getTransaction();
                                 entityTransaction.begin();
-
                                 entityManager.merge(vkUser);
 
                                 entityTransaction.commit();
                                 entityManager.close();
                             } catch (Exception e) {
-
+                                //System.out.println(e.getMessage());
                             }
                         }
                         a += 500;
