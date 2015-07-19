@@ -1,7 +1,5 @@
 package ru.sadv1r.openfms;
 
-import java.io.IOException;
-
 /**
  * Базовый, абстрактный класс, для парсеров социальных сетей
  * Created on 5/4/15.
