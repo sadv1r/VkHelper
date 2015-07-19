@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Пользователь социальной сети Вконтакте
@@ -46,7 +48,7 @@ public class VkUser extends User implements Serializable {
     private String birthday;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="cityId", foreignKey = @ForeignKey(name = "FK_CITY"))
+    @JoinColumn(name = "cityId", foreignKey = @ForeignKey(name = "FK_CITY"))
     @JsonProperty("city")
     private City city;
 
@@ -82,7 +84,7 @@ public class VkUser extends User implements Serializable {
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="countryId", foreignKey = @ForeignKey(name = "FK_COUNTRY"))
+    @JoinColumn(name = "countryId", foreignKey = @ForeignKey(name = "FK_COUNTRY"))
     @JsonProperty("country")
     private Country country;
 
@@ -117,10 +119,8 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @ManyToOne
-    @JoinColumn(name="id", foreignKey = @ForeignKey(name = "FK_SCHOOL"))
-    @JsonProperty("schools")
-    private School[] schools;
+    @OneToMany(mappedBy = "vkUser", cascade = CascadeType.ALL)
+    public List<School> schools = new ArrayList<>();
 
     @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -128,10 +128,13 @@ public class VkUser extends User implements Serializable {
         private static final long serialVersionUID = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonProperty("id") //FIXME! WTF
         private int id;
 
-        @JsonProperty("id") //FIXME! WTF
+        @ManyToOne
+        @JoinColumn(name = "vkId", foreignKey = @ForeignKey(name = "FK_SCHOOL"))
+        public VkUser vkUser;
+
+        @JsonProperty("id")
         private int schoolId;
 
         @JsonProperty("country")
@@ -163,6 +166,14 @@ public class VkUser extends User implements Serializable {
 
         @JsonProperty("type_str")
         private String typeStr;
+
+        public VkUser getVkUser() {
+            return vkUser;
+        }
+
+        public void setVkUser(VkUser vkUser) {
+            this.vkUser = vkUser;
+        }
 
         public int getSchoolId() {
             return schoolId;
@@ -264,10 +275,8 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @ManyToOne
-    @JoinColumn(name="universityId", foreignKey = @ForeignKey(name = "FK_UNIVERSITY"))
-    @JsonProperty("universities")
-    private University[] universities;
+    @OneToMany(mappedBy = "vkUser", cascade = CascadeType.ALL)
+    public List<University> universities = new ArrayList<>();
 
     @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -276,6 +285,10 @@ public class VkUser extends User implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
+
+        @ManyToOne
+        @JoinColumn(name = "vkId", foreignKey = @ForeignKey(name = "FK_UNIVERSITY"))
+        public VkUser vkUser;
 
         @JsonProperty("id")
         private int universityId;
@@ -303,6 +316,14 @@ public class VkUser extends User implements Serializable {
 
         @JsonProperty("graduation")
         private int graduation;
+
+        public VkUser getVkUser() {
+            return vkUser;
+        }
+
+        public void setVkUser(VkUser vkUser) {
+            this.vkUser = vkUser;
+        }
 
         public int getUniversityId() {
             return universityId;
@@ -405,10 +426,6 @@ public class VkUser extends User implements Serializable {
     private String skype;
 
 
-    @ElementCollection
-    private Set<Integer> friends;
-
-
     public int getVkId() {
         return vkId;
     }
@@ -499,22 +516,28 @@ public class VkUser extends User implements Serializable {
         this.country = country;
     }
 
-    public School[] getSchools() {
+    public List<School> getSchools() {
         return schools;
     }
 
     @JsonSetter("schools")
     public void setSchools(School[] schools) {
-        this.schools = schools;
+        this.schools = new ArrayList<>(Arrays.asList(schools));
+        for (School school : schools) {
+            school.setVkUser(this);
+        }
     }
 
-    public University[] getUniversities() {
+    public List<University> getUniversities() {
         return universities;
     }
 
     @JsonSetter("universities")
     public void setUniversities(University[] universities) {
-        this.universities = universities;
+        this.universities = new ArrayList<>(Arrays.asList(universities));
+        for (University university : universities) {
+            university.setVkUser(this);
+        }
     }
 
     public String getProfilePhotoUrl() {
@@ -574,13 +597,5 @@ public class VkUser extends User implements Serializable {
     @JsonSetter("skype")
     public void setSkype(String skype) {
         this.skype = skype;
-    }
-
-    public Set<Integer> getFriends() {
-        return friends;
-    }
-
-    public void setFriends(Set<Integer> friends) {
-        this.friends = friends;
     }
 }
