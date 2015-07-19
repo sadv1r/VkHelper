@@ -48,6 +48,7 @@ public class VkUser extends User implements Serializable {
     private String birthday;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="cityId", foreignKey = @ForeignKey(name = "FK_CITY"))
     @JsonProperty("city")
     private City city;
 
@@ -84,6 +85,7 @@ public class VkUser extends User implements Serializable {
     }
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="countryId", foreignKey = @ForeignKey(name = "FK_COUNTRY"))
     @JsonProperty("country")
     private Country country;
 
@@ -121,6 +123,7 @@ public class VkUser extends User implements Serializable {
 
     @Transient
     @ManyToOne
+    @JoinColumn(name="id", foreignKey = @ForeignKey(name = "FK_SCHOOL"))
     @JsonProperty("schools")
     private School[] schools;
 
@@ -130,10 +133,10 @@ public class VkUser extends User implements Serializable {
         private static final long serialVersionUID = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @JsonProperty("id")
+        @JsonProperty("id") //FIXME! WTF
         private int id;
 
-        @JsonProperty("id")
+        @JsonProperty("id") //FIXME! WTF
         private int schoolId;
 
         @JsonProperty("country")
@@ -266,8 +269,8 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @Transient
     @ManyToOne
+    @JoinColumn(name="universityId", foreignKey = @ForeignKey(name = "FK_UNIVERSITY"))
     @JsonProperty("universities")
     private University[] universities;
 
@@ -290,7 +293,7 @@ public class VkUser extends User implements Serializable {
 
         @JsonProperty("name")
         private String name;
-
+        
         @JsonProperty("faculty")
         private int faculty;
 
