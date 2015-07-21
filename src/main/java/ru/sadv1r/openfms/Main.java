@@ -4,10 +4,14 @@ import org.apache.commons.cli.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * Внимание! Класс содержит адову кучу говнокода!
@@ -61,6 +65,13 @@ public class Main {
             actionOptionGroup.addOption(new Option("A", "all", false, "сохраняем всех пользователей (необходима база)"));
             actionOptionGroup.addOption(new Option("i", "info", false, "получить информацию о пользователе"));
             actionOptionGroup.addOption(new Option("F", "friends", false, "получить список друзей пользователя"));
+            actionOptionGroup.addOption(Option.builder("m")
+                    .longOpt("fields")
+                    .desc("сравнить списки пользователей")
+                    .hasArgs()
+                    .argName("domains")
+                    .valueSeparator(',')
+                    .build());
             options.addOptionGroup(actionOptionGroup);
 
         /*options.addOption(Option.builder("f")
@@ -156,15 +167,33 @@ public class Main {
                         System.out.println(i);
                     }
                 } else if (commandLine.hasOption("i")) {
-                    String targetDomain = commandLine.getOptionValue("u");
-                    int targetId;
-                    if (targetDomain.matches("\\d+")) {
-                        targetId = Integer.parseInt(targetDomain);
+                    if (commandLine.hasOption("u")) {
+                        String targetDomain = commandLine.getOptionValue("u");
+                        int targetId;
+                        if (targetDomain.matches("\\d+")) {
+                            targetId = Integer.parseInt(targetDomain);
+                        } else {
+                            targetId = VkParser.getUserId(targetDomain);
+                        }
+                        VkUser vkUser = VkParser.parse(targetId);
+                        printUserInfo(vkUser);
                     } else {
-                        targetId = VkParser.getUserId(targetDomain);
+                        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String inputStr;
+                        while ((inputStr = bufferedReader.readLine()) != null) {
+                            String targetDomain = inputStr;
+                            int targetId;
+                            if (targetDomain.matches("\\d+")) {
+                                targetId = Integer.parseInt(targetDomain);
+                            } else {
+                                targetId = VkParser.getUserId(targetDomain);
+                            }
+                            VkUser vkUser = VkParser.parse(targetId);
+                            printUserInfo(vkUser);
+                        }
                     }
-                    VkUser vkUser = VkParser.parse(targetId);
-                    printUserInfo(vkUser);
+
                 } else if (commandLine.hasOption("F")) {
                     String targetDomain = commandLine.getOptionValue("u");
                     int targetId;
@@ -173,7 +202,11 @@ public class Main {
                     } else {
                         targetId = VkParser.getUserId(targetDomain);
                     }
-                    System.out.println(VkParser.parseFriends(targetId));
+
+                    ArrayList<Integer> friends = VkParser.parseFriends(targetId);
+                    for (int friend : friends) {
+                        System.out.println(friend);
+                    }
                 } else if (commandLine.hasOption("all")) {
                     HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
                     int a = 1;
@@ -211,6 +244,48 @@ public class Main {
                         targetId = VkParser.getUserId(targetDomain);
                     }
                     System.out.println(VkGroupParser.parseUsers(targetId)); //FIXME! построчный вывод каждого id в parseUsers (не всем скопом)
+                } else if (commandLine.hasOption("m")) {
+                    String domains[] = commandLine.getOptionValues("m");
+                    ArrayList<ArrayList<Integer>> usersMap = new ArrayList<>();
+                    for (String domain : domains) {
+                        ArrayList<Integer> users = new ArrayList<>();
+                        int id = 0;
+                        if (domain.matches("\\d+")) {
+                            id = Integer.parseInt(domain);
+                            users = VkParser.parseFriends(id);
+                        } else if (domain.matches("-\\d+")) {
+                            id = Integer.parseInt(domain.substring(1));
+                            users = VkGroupParser.parseUsers(id);
+                        } else {
+                            //ввели screenname по этому нужно проверить, группа это или нет
+                            //дальше if группа одно, не группа другое
+                            System.out.println("пиши id блиадь. ScreenName пока не работают");
+                        }
+                        usersMap.add(users);
+                    }
+
+                    int usersMapCount = usersMap.size();
+                    HashMap<Integer, Integer> resultMap = new HashMap<>();
+
+                    for (ArrayList<Integer> integers : usersMap) {
+                        for (Integer integer : integers) {
+                            if (resultMap.containsKey(integer)) {
+                                int temp = resultMap.get(integer);
+                                resultMap.remove(integer);
+                                resultMap.put(integer, temp + 1);
+                            } else {
+                                resultMap.put(integer, 1);
+                            }
+                        }
+                    }
+
+                    for (Map.Entry<Integer, Integer> users : resultMap.entrySet()) {
+                        //System.out.println(users.getKey() + ":" + users.getValue());
+                        if (users.getValue() == usersMapCount) {
+                            System.out.println(users.getKey());
+                        }
+                    }
+
                 } else {
                     System.out.println("Неверные аругменты. Для справки воспользуйтесь -h");
                 }
