@@ -8,25 +8,27 @@
 Текущая справка:
 -----
 ```
-usage: java -jar openfms-[version].jar [-A | -gu | -H | -i] [-f <fields>]
-       [-g <domain> | -u <domain>]  -h | -vk
- -A,--all               сохраняем всех пользователей (недоступно)
- -f,--fields <fields>   установить кастомные поля
-                        Например: -а sex,bdate,city
-                        Полный список доступных полей:
-                        sex,bdate,city,country,photo_max_orig,online,onlin
-                        e_mobile,has_mobile,contacts,connections,site,educ
-                        ation,universities,schools,status,last_seen,relati
-                        on,relatives,counters,screen_name,maiden_name,occu
-                        pation,activities,interests,music,movies,tv,books,
-                        games,about,quotes,personal,nickname
- -g,--group <domain>    id или screenName группы
- -gu,--group-users      получить список пользователей группы
- -h,--help              вывод этого сообщения
- -H,--hidden            поиск скрытых друзей
- -i,--info              получить информацию о пользователе
- -u,--user <domain>     id или screenName пользователя
- -vk,--vkontakte        работаем с Вконтакте
+usage: java -jar openfms-[version].jar [-A | -F | -gu | -H | -i | -m
+       <domains>]  [-f <fields>] [-g <domain> | -u <domain>]  -h | -vk
+ -A,--all                сохраняем всех пользователей (необходима база)
+ -F,--friends            получить список друзей пользователя
+ -f,--fields <fields>    установить кастомные поля
+                         Например: -а sex,bdate,city
+                         Полный список доступных полей:
+                         sex,bdate,city,country,photo_max_orig,online,onli
+                         ne_mobile,has_mobile,contacts,connections,site,ed
+                         ucation,universities,schools,status,last_seen,rel
+                         ation,relatives,counters,screen_name,maiden_name,
+                         occupation,activities,interests,music,movies,tv,b
+                         ooks,games,about,quotes,personal,nickname
+ -g,--group <domain>     id или screenName группы
+ -gu,--group-users       получить список пользователей группы
+ -h,--help               вывод этого сообщения
+ -H,--hidden             поиск скрытых друзей
+ -i,--info               получить информацию о пользователе
+ -m,--fields <domains>   сравнить списки пользователей
+ -u,--user <domain>      id или screenName пользователя
+ -vk,--vkontakte         работаем с Вконтакте
  ```
 Примеры использования:
 -----
