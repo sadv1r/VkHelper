@@ -54,7 +54,7 @@ java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -g <id групп
 ```
 Пример комбинированного запроса:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u sadv1r -F |
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id пользователя или screenName> -F |
 java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -i -f sex,bdate
 ```
 
