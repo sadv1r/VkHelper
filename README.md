@@ -58,15 +58,6 @@ java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id польз
 java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -i -f sex,bdate
 ```
 
-Цель:
------
-Получение разнообразной интересной информации из открытых источников
-
-Поддерживаемые социальные сети:
------
-Вконтакте
-
-
 Реализация
 -----
 [Схема базы данных (возможный варинт)](http://dbdesigner.net/designer/schema/808)
