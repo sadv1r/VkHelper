@@ -1,7 +1,8 @@
 # VkHelper
 
-Последний билд утилиты:
+Скачать:
 -----
+[VkHelper-1.0.0-ALPHA](http://file.sadv1r.ru/vk-helper-1.0.0-ALPHA.jar)
 [VkHelper-1.0.0-SNAPSHOT](http://file.sadv1r.ru/vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar)
 
 Текущая справка:
