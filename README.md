@@ -31,26 +31,26 @@ usage: java -jar vk-helper-[version].jar -F | -gu | -h | -H | -i | -m
 -----
 Для получения справки:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h
 ```
 Для получения всей информации:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i
 ```
 Для получения конкретных полей:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i -f sex,bdate
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i -f sex,bdate
 ```
 Для получения списка скрытых друзей пользователя (находит не всех):
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -H
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -H
 ```
 Для получения списка участников группы:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -g <id группы или screenName> -gu
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -g <id группы или screenName> -gu
 ```
 Пример комбинированного запроса:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -F |
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -i -f sex,bdate
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -F |
+java -jar vk-helper-1.0.0-SNAPSHOT-jar-with-dependencies.jar -i -f sex,bdate
 ```
