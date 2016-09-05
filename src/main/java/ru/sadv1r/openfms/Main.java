@@ -28,6 +28,21 @@ public class Main {
         } else {
             Options options = new Options();
 
+            OptionGroup targetTypeOptionGroup = new OptionGroup();
+            targetTypeOptionGroup.addOption(Option.builder("u")
+                    .longOpt("user")
+                    .desc("id или screenName пользователя")
+                    .hasArg()
+                    .argName("domain")
+                    .build());
+            targetTypeOptionGroup.addOption(Option.builder("g")
+                    .longOpt("group")
+                    .desc("id или screenName группы")
+                    .hasArg()
+                    .argName("domain")
+                    .build());
+            options.addOptionGroup(targetTypeOptionGroup);
+
             OptionGroup mainOptionGroup = new OptionGroup();
             mainOptionGroup.setRequired(true);
             mainOptionGroup.addOption(new Option("h", "help", false, "вывод этого сообщения"));
@@ -43,21 +58,6 @@ public class Main {
                     .valueSeparator(',')
                     .build());
             options.addOptionGroup(mainOptionGroup);
-
-            OptionGroup targetTypeOptionGroup = new OptionGroup();
-            targetTypeOptionGroup.addOption(Option.builder("u")
-                    .longOpt("user")
-                    .desc("id или screenName пользователя")
-                    .hasArg()
-                    .argName("domain")
-                    .build());
-            targetTypeOptionGroup.addOption(Option.builder("g")
-                    .longOpt("group")
-                    .desc("id или screenName группы")
-                    .hasArg()
-                    .argName("domain")
-                    .build());
-            options.addOptionGroup(targetTypeOptionGroup);
 
             options.addOption(Option.builder("f")
                     .longOpt("fields")
