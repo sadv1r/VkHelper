@@ -8,9 +8,8 @@
 Текущая справка:
 -----
 ```
-usage: java -jar openfms-[version].jar [-A | -F | -gu | -H | -i | -m
-       <domains>]  [-f <fields>] [-g <domain> | -u <domain>]  -h | -vk
- -A,--all                сохраняем всех пользователей (необходима база)
+usage: java -jar openfms-[version].jar -F | -gu | -H | -h | -i | -m
+       <domains> [-f <fields>] [-g <domain> | -u <domain>]
  -F,--friends            получить список друзей пользователя
  -f,--fields <fields>    установить кастомные поля
                          Например: -а sex,bdate,city
@@ -23,12 +22,11 @@ usage: java -jar openfms-[version].jar [-A | -F | -gu | -H | -i | -m
                          ooks,games,about,quotes,personal,nickname
  -g,--group <domain>     id или screenName группы
  -gu,--group-users       получить список пользователей группы
- -h,--help               вывод этого сообщения
  -H,--hidden             поиск скрытых друзей
+ -h,--help               вывод этого сообщения
  -i,--info               получить информацию о пользователе
- -m,--fields <domains>   сравнить списки пользователей
+ -m,--mutual <domains>   сравнить списки пользователей
  -u,--user <domain>      id или screenName пользователя
- -vk,--vkontakte         работаем с Вконтакте
  ```
 Примеры использования:
 -----
@@ -38,28 +36,22 @@ java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -h
 ```
 Для получения всей информации:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id пользователя или screenName> -i
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i
 ```
 Для получения конкретных полей:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id пользователя или screenName> -i -f sex,bdate
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -i -f sex,bdate
 ```
 Для получения списка скрытых друзей пользователя (находит не всех):
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id пользователя или screenName> -H
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -H
 ```
 Для получения списка участников группы:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -g <id группы или screenName> -gu
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -g <id группы или screenName> -gu
 ```
 Пример комбинированного запроса:
 ```
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -u <id пользователя или screenName> -F |
-java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -vk -i -f sex,bdate
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -u <id пользователя или screenName> -F |
+java -jar openfms-1.0.0-SNAPSHOT-jar-with-dependencies.jar -i -f sex,bdate
 ```
-
-Реализация
------
-[Схема базы данных (возможный варинт)](http://dbdesigner.net/designer/schema/808)
-
-[Схема базы данных (текущий варинт)](http://img.sadv1r.ru/8x3ax.png)
