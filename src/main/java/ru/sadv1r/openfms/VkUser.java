@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,12 +16,10 @@ import java.util.List;
  * @author sadv1r
  * @version 1.0
  */
-@Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VkUser extends User implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
     @JsonProperty("id")
     private int vkId;
 
@@ -47,17 +44,14 @@ public class VkUser extends User implements Serializable {
     @JsonProperty("bdate")
     private String birthday;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cityId", foreignKey = @ForeignKey(name = "FK_CITY"))
     @JsonProperty("city")
     private City city;
 
-    @Entity
     public static class City implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_CITY_MIN_ID = 1;
         private static final int VK_CITY_MAX_ID = 1_000_000_000;
-        @Id
+
         @JsonProperty("id")
         private int cityId;
 
@@ -83,17 +77,14 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "countryId", foreignKey = @ForeignKey(name = "FK_COUNTRY"))
     @JsonProperty("country")
     private Country country;
 
-    @Entity
     public static class Country implements Serializable {
         private static final long serialVersionUID = 1L;
         private static final int VK_COUNTRY_MIN_ID = 1;
         private static final int VK_COUNTRY_MAX_ID = 300;
-        @Id
+
         @JsonProperty("id")
         private int countryId;
 
@@ -119,19 +110,13 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @OneToMany(mappedBy = "vkUser", cascade = CascadeType.ALL)
     public List<School> schools = new ArrayList<>();
 
-    @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class School implements Serializable {
         private static final long serialVersionUID = 1L;
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
 
-        @ManyToOne
-        @JoinColumn(name = "vkId", foreignKey = @ForeignKey(name = "FK_SCHOOL"))
         public VkUser vkUser;
 
         @JsonProperty("id")
@@ -275,19 +260,14 @@ public class VkUser extends User implements Serializable {
         }
     }
 
-    @OneToMany(mappedBy = "vkUser", cascade = CascadeType.ALL)
     public List<University> universities = new ArrayList<>();
 
-    @Entity
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class University implements Serializable {
         private static final long serialVersionUID = 1L;
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
+
         private int id;
 
-        @ManyToOne
-        @JoinColumn(name = "vkId", foreignKey = @ForeignKey(name = "FK_UNIVERSITY"))
         public VkUser vkUser;
 
         @JsonProperty("id")

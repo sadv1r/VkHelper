@@ -1,6 +1,5 @@
 package ru.sadv1r.openfms;
 
-import javax.persistence.Entity;
 
 /**
  * Created on 1/21/16.
@@ -9,6 +8,6 @@ import javax.persistence.Entity;
  * @version 0.1
  */
 
-@Entity
+
 public class VkPhoto {
 }

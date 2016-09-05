@@ -2,8 +2,6 @@ package ru.sadv1r.openfms;
 
 import org.apache.commons.cli.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,7 +19,7 @@ import java.util.Map;
  * @version 0.1
  */
 public class Main {
-    private static final String COMMAND_LINE_SYNTAX = "java -jar openfms-[version].jar";
+    private static final String COMMAND_LINE_SYNTAX = "java -jar vk-helper-[version].jar";
 
     public static void main(String[] args) throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, ParseException {
         /* Если аргументов нет */
@@ -201,7 +199,7 @@ public class Main {
             //endregion
             //region ALL
             else if (commandLine.hasOption("all")) {
-                HibernateUtil.buildEntityManagerFactory("OpenfmsPersistenceUnit");
+
                 int a = 1;
                 int[] ids = new int[500];
 
@@ -215,13 +213,7 @@ public class Main {
                     ArrayList<VkUser> vkUsers = VkParser.parse(ids);
                     for (VkUser vkUser : vkUsers) {
                         try { //FIXME! сделать уже что-то с этим костылем
-                            EntityManager entityManager = HibernateUtil.getEntityManager();
-                            EntityTransaction entityTransaction = entityManager.getTransaction();
-                            entityTransaction.begin();
-                            entityManager.merge(vkUser);
 
-                            entityTransaction.commit();
-                            entityManager.close();
                         } catch (Exception e) {
                             //System.out.println(e.getMessage());
                         }
