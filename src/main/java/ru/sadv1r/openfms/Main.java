@@ -279,9 +279,9 @@ public class Main {
 
             }
             //endregion
-            else {
+            /*else {
                 System.out.println("Неверные аругменты. Для справки воспользуйтесь -h");
-            }
+            }*/
         }
     }
 
