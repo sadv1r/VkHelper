@@ -101,6 +101,10 @@
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                     <encoding>UTF-8</encoding>
+                    <excludes>
+                        <exclude>ru/sadv1r/openfms/alpha/**</exclude>
+                        <exclude>ru/sadv1r/openfms/VkPhoto.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
