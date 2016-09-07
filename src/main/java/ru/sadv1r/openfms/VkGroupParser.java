@@ -3,7 +3,9 @@ package ru.sadv1r.openfms;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 /**
@@ -20,7 +22,7 @@ public class VkGroupParser extends Parser {
      * @param groupId Уникальный идентификатор пользователя <b>id</b>
      * @return Объект пользователя
      */
-    public static ArrayList<Integer> parseUsers(int groupId) throws IOException {
+    public static void printUsers(int groupId) throws IOException {
         //logger.trace("Запуск метода parse(int)");
         ObjectMapper mapper = new ObjectMapper();
         int offset = 0;
@@ -35,15 +37,29 @@ public class VkGroupParser extends Parser {
             documentToParse = vkApiGroupsGetMembersURL + offset;
             JsonNode groupsGetMembersResult = getJsonNodeFromApi(documentToParse).get("response").get("items");
             for (JsonNode node : groupsGetMembersResult) {
-                membersIds.add(node.asInt());
+                System.out.println(node.asInt());
             }
             offset += 1000;
         }
 
         //logger.trace("Получаем основные данные пользователя c id: " + vkId);
         //logger.debug("Получены основные данные пользователя: \"" + vkId + "\"");
-        return membersIds;
+    }
 
+
+    public static ArrayList<Integer> parseUsers(int groupId) throws IOException {
+        //logger.trace("Запуск метода parse(int)");
+
+        ArrayList<Integer> membersIds = new ArrayList<>();
+
+        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String targetDomain;
+        while ((targetDomain = bufferedReader.readLine()) != null) {
+            membersIds.add(Integer.parseInt(targetDomain));
+        }
+
+        return membersIds;
     }
 
 }

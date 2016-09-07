@@ -165,9 +165,8 @@ public class Main {
                 } else {
                     InputStreamReader inputStreamReader = new InputStreamReader(System.in);
                     BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                    String inputStr;
-                    while ((inputStr = bufferedReader.readLine()) != null) {
-                        String targetDomain = inputStr;
+                    String targetDomain;
+                    while ((targetDomain = bufferedReader.readLine()) != null) {
                         int targetId;
                         if (targetDomain.matches("\\d+")) {
                             targetId = Integer.parseInt(targetDomain);
@@ -231,7 +230,7 @@ public class Main {
                 } else {
                     targetId = VkParser.getUserId(targetDomain);
                 }
-                System.out.println(VkGroupParser.parseUsers(targetId)); //FIXME! построчный вывод каждого id в parseUsers (не всем скопом)
+                VkGroupParser.printUsers(targetId); //FIXME! построчный вывод каждого id в parseUsers (не всем скопом)
             }
             //endregion
             //region Mutual Friends
