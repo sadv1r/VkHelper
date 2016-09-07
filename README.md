@@ -2,7 +2,7 @@
 
 Скачать:
 -----
-[VkHelper-1.0.0-ALPHA](http://file.sadv1r.ru/vk-helper-1.0.0-ALPHA.jar)
+[VkHelper-1.0.0-BETA](http://file.sadv1r.ru/vk-helper-1.0.0-BETA.jar)
 
 Текущая справка:
 -----
